@@ -1,0 +1,62 @@
+@use "colors" as *;
+
+.app-header{
+    display: flex;
+    background-color: $primary;
+    padding: 10px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    &__container{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        width: 100%;
+
+        &__logo{
+            display: flex;
+            padding-left: 1rem;
+            gap: 2rem;
+            align-items: center;
+    
+            &__title{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                font-family: 'Celsius Flower', sans-serif;
+                color: $text-title;
+                font-weight: bold;
+            }
+            
+            a{
+                font-size: 2rem;
+                color: $text-title;
+                text-decoration: none;
+
+                transition: color 0.2s ease-in-out;
+
+                &:hover{
+                    color: $text-light;
+                }
+            }
+        }
+        &__nav-links{
+            display: flex;
+            gap: 20px;
+            font-family: 'Celsius Flower', sans-serif;
+            color: $text-title;
+            font-weight: bold;
+
+            a{
+                font-size: 1.5rem;
+                color: $text-title;
+                text-decoration: none;
+                transition: color 0.2s ease-in-out;
+
+                &:hover{
+                    color: $text-light;
+                }
+            }
+        }
+    }
+}
