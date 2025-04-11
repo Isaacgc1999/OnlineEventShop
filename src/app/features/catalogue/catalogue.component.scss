@@ -1,0 +1,17 @@
+.catalogue-container {
+    gap: 1.5rem;
+    padding: 2rem 15rem 2rem 15rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    @media (min-width: 769px) and (max-width: 1200px) {
+        gap: 1rem;
+        padding: 2rem 5rem 2rem 5rem;
+    }
+
+    @media (max-width: 768px) {
+        display: flex;
+        flex-direction: column;
+        padding: 2rem 4rem 2rem 4rem;
+    }
+}
