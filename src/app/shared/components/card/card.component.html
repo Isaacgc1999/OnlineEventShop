@@ -1,0 +1,14 @@
+<mat-card appearance="outlined">
+    <mat-card-header>
+        <mat-card-title>{{title()}}</mat-card-title>
+        <mat-card-subtitle>{{subtitle()}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <img mat-card-image [src]="image()" alt="Event Image" />
+        <p>{{startDate()}} - {{endDate()}}</p>
+        <p>{{description()}}</p>
+    </mat-card-content>
+    <mat-card-actions>
+        <app-button [text]="'Buy'" (click)="onClick()"></app-button>
+    </mat-card-actions>
+</mat-card>
