@@ -3,7 +3,7 @@
 .app-header{
     display: flex;
     background-color: $dark;
-    padding: 10px 20px;
+    padding: 15px 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
     &__container{
@@ -15,7 +15,7 @@
 
         &__logo{
             display: flex;
-            gap: 2rem;
+            gap: 1rem;
             align-items: center;
     
             &__title{

@@ -1,7 +1,7 @@
 @use "colors" as *;
 
 .custom-button{
-    background-color: $button-primary;
+    background-color: $dark;
     color: $light;
     border: none;
     padding: 10px 20px;
@@ -13,6 +13,6 @@
     animation: color 0.5s ease-in-out forwards;
 
     &:hover{
-        background-color: $button-hover;
+        background-color: $gray-600;
     }
 }

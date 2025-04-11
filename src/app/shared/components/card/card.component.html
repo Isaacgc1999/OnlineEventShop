@@ -2,9 +2,9 @@
     <mat-card-header class="custom-card__header">
         <mat-card-title class="custom-card__header__title">{{title()}}</mat-card-title>
         <mat-card-subtitle class="custom-card__header__subtitle">{{subtitle()}}</mat-card-subtitle>
+        <img mat-card-image src="/images/sample-image.jpg" alt="Event Image" class="custom-card__content__image"/>
     </mat-card-header>
     <mat-card-content class="custom-card__content">
-        <img mat-card-image src="/images/sample-image.jpg" alt="Event Image" class="custom-card__content__image"/>
         <p class="custom-card__content__dates">{{startDate() | date:'dd/MM/yyyy'}} - {{endDate() | date:'dd/MM/yyyy'}}</p>
         <p class="custom-card__content__description" [innerHTML]="description()"></p>
     </mat-card-content>

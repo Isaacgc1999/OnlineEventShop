@@ -1,7 +1,7 @@
 .catalogue-container {
+    display: grid;
     gap: 1.5rem;
     padding: 2rem 15rem 2rem 15rem;
-    display: grid;
     grid-template-columns: repeat(2, 1fr);
 
     @media (min-width: 769px) and (max-width: 1200px) {
