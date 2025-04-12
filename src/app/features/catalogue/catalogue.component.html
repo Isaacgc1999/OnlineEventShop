@@ -1,13 +1,22 @@
 <div class="catalogue-container">
-    @for(event of events; track event.id)
-    {
-        <app-card class="catalogue-container__card" 
-            [title]="event.title"
-            [subtitle]="event.subtitle"
-            [description]="event.description"
-            [image]="event.image"
-            [startDate]="event.startDate"
-            [endDate]="event.endDate">
-        </app-card>
+    @defer(on viewport){
+        @for(event of events; track event.id)
+        {
+            <app-card class="catalogue-container__card" 
+                [title]="event.title"
+                [subtitle]="event.subtitle"
+                [description]="event.description"
+                [image]="event.image"
+                [startDate]="event.startDate"
+                [endDate]="event.endDate"
+                (click)="onCardClick(event.id)">
+            </app-card>
+        }
+    }
+    @placeholder {
+        <p>Loading events...</p>
+    }
+    @error {
+    <p class="error-message">There was an error trying to load the data.</p>
     }
 </div>

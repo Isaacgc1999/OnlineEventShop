@@ -1,16 +1,24 @@
+@use "colors" as *;
+
 .custom-card{
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    height: 540px;
     padding-bottom: 1rem;
     justify-content: space-between;
 
-    @media (min-width: 769px) and (max-width: 1800px) {
-        height: 580px;
+    //medium screens
+    @media (min-width: 768px) and (max-width: 1140px) {
+        height: 540px;
     }
-    @media (max-width: 400px) {
-        height: 420px;
+    //large screens
+    @media (min-width: 1141px) and (max-width: 1500px) {
+        height: 560px;
+    }
+
+    //extra large screens
+    @media (min-width: 1501px) {
+        height: 580px;
     }
 
     &__header{
@@ -18,14 +26,35 @@
         flex-direction: column;
         gap: 0.5rem;
     
-        &__title {
+        &__title {            
             font-size: 1rem;
             font-weight: bold;
+            display: inline-block;
+            transition: letter-spacing 0.3s ease-in-out;
+
+            &:hover{
+                color: $secondary;
+                text-decoration: underline;
+                cursor: pointer;
+                letter-spacing: 0.03em;
+            }
         }
 
         &__subtitle {
-            font-size: 0.8rem;
-            color: rgba(0, 0, 0, 0.6);
+            .text{
+                font-size: 0.8rem;
+                color: rgba(0, 0, 0, 0.6);
+                display: inline-block;
+                transition: letter-spacing 0.3s ease-in-out;
+
+                &:hover{
+                    color: $secondary;
+                    text-decoration: underline;
+                    cursor: pointer;
+                    letter-spacing: 0.03em;
+                }
+            }
+
         }
     }
 
@@ -41,6 +70,12 @@
             max-height: 250px; 
             object-fit: cover; 
             border-radius: 15px;
+            transition: transform 0.3s ease-in-out;
+
+            &:hover{
+                cursor: pointer;
+                transform: scale(0.95);
+            }
         }
     
         &__dates {
@@ -49,10 +84,11 @@
     
         &__description {
             line-height: 1.6;
+            text-align: justify;
 
-            @media (max-width: 400px) {
-                height: 100px;
-                overflow: scroll;
+            //don't show on small screens
+            @media (max-width: 768px) {
+                display: none;
             }
         }
     }
