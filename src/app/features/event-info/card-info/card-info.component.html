@@ -1,13 +1,24 @@
 <div class="card-info">
     <mat-card>
-        @for(session of eventInfo; track session){
+        @if (isLoading) {
             <mat-card-content class="card-info__content">
-                <p class="text">Fecha: {{session.date| date:'dd/MM/yyyy'}}, Disponibilidad: {{session.availability}}</p>
-                <app-number-input class="button" [ngClass]="{'padded-right': session.availability < '9'}" 
+                <p class="text">LOADING...</p>
+            </mat-card-content>
+        } @else {
+            @if (eventInfo && eventInfo.length === 0) {
+            <mat-card-content class="card-info__content">
+                <p class="text">EVENT INFO NOT FOUND</p>
+            </mat-card-content>
+            } @else if (eventInfo) {
+            @for(session of eventInfo; track session) {
+                <mat-card-content class="card-info__content">
+                <p class="text">Date: {{session.date| date:'dd/MM/yyyy'}}, Availability: {{session.availability}}</p>
+                <app-number-input class="button" [ngClass]="{'padded-right': +session.availability < 10}"
                     [maxValue]="session.availability" (valueChange)="onChangedValue($event, session)">
                 </app-number-input>
-            </mat-card-content>
+                </mat-card-content>
+            }
+            }
         }
     </mat-card>
 </div>
-

@@ -25,6 +25,7 @@ export class CardInfoComponent {
   private route = inject(ActivatedRoute);
 
   private readonly destroy$ = new Subject<void>();
+  isLoading: boolean = true;
 
 
   readonly numInputSelection = output<{num: number, session: Session}>();
@@ -35,7 +36,6 @@ export class CardInfoComponent {
   ngOnInit(){
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.eventId = params.get('id');
-      console.log('Event ID:', this.eventId);
       if (this.eventId) {
         this.loadEventDetails(this.eventId);
       }
@@ -48,9 +48,12 @@ export class CardInfoComponent {
       .subscribe({
         next: (details) => {
           this.eventInfo = details.sessions.sort((a, b) => Number(a.date) - Number(b.date));
+          this.isLoading = false;
         },
         error: (error) => {
-          console.error('Error loading event details:', error);
+          console.error('EVENT INFO NOT FOUND:', error);
+          this.eventInfo = []; 
+          this.isLoading = false;
         }
       });
   }
