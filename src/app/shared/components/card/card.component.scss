@@ -9,6 +9,9 @@
     @media (min-width: 769px) and (max-width: 1800px) {
         height: 580px;
     }
+    @media (max-width: 400px) {
+        height: 420px;
+    }
 
     &__header{
         display: flex;
@@ -46,6 +49,11 @@
     
         &__description {
             line-height: 1.6;
+
+            @media (max-width: 400px) {
+                height: 100px;
+                overflow: scroll;
+            }
         }
     }
 
