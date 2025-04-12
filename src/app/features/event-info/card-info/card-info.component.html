@@ -1,0 +1,13 @@
+<div class="card-info">
+    <mat-card>
+        @for(session of eventInfo; track session){
+            <mat-card-content class="card-info__content">
+                <p class="text">Fecha: {{session.date| date:'dd/MM/yyyy'}}, Disponibilidad: {{session.availability}}</p>
+                <app-number-input class="button" [ngClass]="{'padded-right': session.availability < '9'}" 
+                    [maxValue]="session.availability" (valueChange)="onChangedValue($event, session)">
+                </app-number-input>
+            </mat-card-content>
+        }
+    </mat-card>
+</div>
+

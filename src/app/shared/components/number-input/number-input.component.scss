@@ -1,0 +1,23 @@
+.number-input{
+    display: flex;
+    align-items: center;
+    
+    &__left{
+        padding: 5px 10px;
+        margin-right: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    &__center{
+        width: 30px;
+        text-align: center;
+    }
+
+    &__right{
+        padding: 5px 10px;
+        margin-left: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+}

@@ -1,6 +1,7 @@
-.info-container{
+
+.card-info{
     display: flex;
-    
+
     mat-card{
         display: flex;
         gap: 1.5rem;
@@ -10,6 +11,11 @@
         display: flex;
         gap: 1.5rem;
         align-items: center;
+        justify-content: space-between;
 
     }
+}
+
+.padded-right{
+    padding-right: 1rem;
 }
