@@ -14,7 +14,7 @@ import { MatCard } from '@angular/material/card';
   styleUrl: './cart.component.scss'
 })
 export class CartComponent {
-   cartItems: CartItem[] = [];
+  cartItems: CartItem[] = [];
   eventTitle: string = '';
   private readonly destroy$ = new Subject<void>();
 

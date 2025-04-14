@@ -51,9 +51,9 @@ export class CartService {
     localStorage.setItem('cartItems', JSON.stringify(currentCart));
   
     localStorage.setItem('eventInfo', JSON.stringify(eventDetails)); 
-    setTimeout(() => {
-      this.updateAvailability(sessionDate, -quantityTickets);
-    }, 0); 
+    // setTimeout(() => {
+    //   this.updateAvailability(sessionDate, -quantityTickets);
+    // }, 0); 
   }
 
   removeItemFromCart(sessionDate: string): void {
