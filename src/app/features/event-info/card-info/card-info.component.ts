@@ -41,20 +41,17 @@ export class CardInfoComponent {
       }
 
       this.savedCartItems = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')!) : [];
-      console.log('Saved Cart Items:', this.savedCartItems);
   }
 
   getRealInfo(){
     this.eventInfo?.forEach((session) => {
       const savedItem = this.savedCartItems.find(item => item.session.date === session.date);
       if (savedItem) {
-        console.log('Saved Item:', savedItem, 'Session:', session);
         session.availability = (Number(session.availability) - savedItem.ticketQuantity).toString();
       } else {
         this.selectedTickets[session.date] = 0;
       }
     });
-    console.log(this.eventInfo);
   }
 
   loadEventDetails(id: string): void {

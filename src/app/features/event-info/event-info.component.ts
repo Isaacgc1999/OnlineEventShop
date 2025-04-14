@@ -36,7 +36,6 @@ export class EventInfoComponent{
       .subscribe({
         next: (details) => {
           this.eventInfo = details;
-          console.log('Event Info:', this.eventInfo);
         },
         error: (error) => {
           console.error('Error loading event details:', error);
