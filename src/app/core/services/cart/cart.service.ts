@@ -30,32 +30,48 @@ export class CartService {
 
   addItemToCart(sessionDate: string, quantityTickets: number): void {
     const currentCart = this.cartItems.getValue();
-    const existingItem = currentCart.find(item => item.session.date === sessionDate);
-
-    if (existingItem) {
+    const existingItemIndex = currentCart.findIndex(item => item.session.date === sessionDate);
+    const eventDetails = this.eventInfo.getValue();
+    const sessionToAdd = eventDetails?.sessions.find(s => s.date === sessionDate);
+  
+    if (!sessionToAdd) return;
+  
+    if (existingItemIndex !== -1) {
+      const existingItem = currentCart[existingItemIndex];
       existingItem.ticketQuantity += quantityTickets;
+  
       if (existingItem.ticketQuantity <= 0) {
-        this.removeItemFromCart(sessionDate);
-      } else {
-        this.cartItems.next([...currentCart]);
+        currentCart.splice(existingItemIndex, 1); 
       }
     } else if (quantityTickets > 0) {
-      const eventDetails = this.eventInfo.getValue();
-      const sessionToAdd = eventDetails?.sessions.find(s => s.date === sessionDate);
-      if (sessionToAdd) {
-        this.cartItems.next([...currentCart, { session: sessionToAdd, ticketQuantity: quantityTickets }]);
-        localStorage.setItem('cartItems', JSON.stringify(this.cartItems.getValue()));
-      }
+      currentCart.push({ session: sessionToAdd, ticketQuantity: quantityTickets });
     }
-    this.updateAvailability(sessionDate, -quantityTickets);
+  
+    this.cartItems.next([...currentCart]);
+    localStorage.setItem('cartItems', JSON.stringify(currentCart));
+  
+    localStorage.setItem('eventInfo', JSON.stringify(eventDetails)); 
+    setTimeout(() => {
+      this.updateAvailability(sessionDate, -quantityTickets);
+    }, 0); 
   }
 
   removeItemFromCart(sessionDate: string): void {
     const currentCart = this.cartItems.getValue();
-    const itemToRemove = currentCart.find(item => item.session.date === sessionDate);
-    if (itemToRemove) {
-      this.cartItems.next(currentCart.filter(item => item.session.date !== sessionDate));
-      this.updateAvailability(sessionDate, itemToRemove.ticketQuantity);
+    const existingItemIndex = currentCart.findIndex(item => item.session.date === sessionDate);
+  
+    if (existingItemIndex !== -1) {
+      const existingItem = currentCart[existingItemIndex];
+      existingItem.ticketQuantity -= 1;
+  
+      if (existingItem.ticketQuantity <= 0) {
+        currentCart.splice(existingItemIndex, 1);
+      }
+  
+      this.cartItems.next([...currentCart]);
+      localStorage.setItem('cartItems', JSON.stringify(currentCart));
+  
+      this.updateAvailability(sessionDate, +1);
     }
   }
 

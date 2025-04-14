@@ -7,6 +7,7 @@ import { Session } from '../../../core/models/event-info.model';
 import { CatalogueService } from '../../../core/services/catalogue/catalogue.service';
 import { Subject, takeUntil } from 'rxjs';
 import { CartService } from '../../../core/services/cart/cart.service';
+import { CartItem } from '../../../core/models/cart.model';
 
 
 @Component({
@@ -27,17 +28,33 @@ export class CardInfoComponent {
   private readonly destroy$ = new Subject<void>();
   isLoading: boolean = true;
 
-  readonly numInputSelection = output<{num: number, session: Session}>();
   readonly eventId = input<string | null>();
   eventInfo?: Session[];
   selectedTickets: { [sessionId: string]: number } = {};
-  readonly ticketChange = output<{ session: Session; quantityChange: number }>();
+
+  savedCartItems: CartItem[] = [];
   
   ngOnInit(){
     const eventId = this.eventId();
       if (eventId) {
         this.loadEventDetails(eventId);
       }
+
+      this.savedCartItems = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')!) : [];
+      console.log('Saved Cart Items:', this.savedCartItems);
+  }
+
+  getRealInfo(){
+    this.eventInfo?.forEach((session) => {
+      const savedItem = this.savedCartItems.find(item => item.session.date === session.date);
+      if (savedItem) {
+        console.log('Saved Item:', savedItem, 'Session:', session);
+        session.availability = (Number(session.availability) - savedItem.ticketQuantity).toString();
+      } else {
+        this.selectedTickets[session.date] = 0;
+      }
+    });
+    console.log(this.eventInfo);
   }
 
   loadEventDetails(id: string): void {
@@ -47,6 +64,7 @@ export class CardInfoComponent {
         next: (details) => {
           this.eventInfo = details.sessions.sort((a, b) => Number(a.date) - Number(b.date));
           this.cartService.setEventInfo(details);
+          this.getRealInfo();
           this.isLoading = false;
         },
         error: (error) => {
