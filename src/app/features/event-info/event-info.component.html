@@ -1,4 +1,6 @@
 <div class="info-container">
-    <app-card-info [eventId]="eventId" (numInputSelection)=""></app-card-info>
-    <app-cart [eventsInCart]="eventInfo"></app-cart>
+    <div class="info-container__elements">
+        <app-card-info class="info" [eventId]="eventId"></app-card-info>
+        <app-cart class="cart"></app-cart>
+    </div>
 </div>

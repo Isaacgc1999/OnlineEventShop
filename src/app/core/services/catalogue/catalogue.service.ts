@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Event } from '../models/event.model';
+import { Event } from '../../models/event.model';
 import { delay, map, Observable, of } from 'rxjs';
-import { EventInfo } from '../models/event-info.model';
+import { EventInfo } from '../../models/event-info.model';
 
 @Injectable({
   providedIn: 'root'

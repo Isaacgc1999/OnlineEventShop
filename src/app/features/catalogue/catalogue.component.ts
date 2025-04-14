@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CardComponent } from "../../shared/components/card/card.component";
-import { CatalogueService } from '../../core/services/catalogue.service';
+import { CatalogueService } from '../../core/services/catalogue/catalogue.service';
 import { Event } from '../../core/models/event.model';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';

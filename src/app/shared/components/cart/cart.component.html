@@ -1,16 +1,19 @@
 <div class="cart">
-    <h2>Shopping Cart</h2>
-    @if(eventsInCart.length === 0) {
-        <p>No tickets selected in the cart.</p>
-    }
-    <h3>{{ eventsInCart().event.title }}</h3>
-    <ul>
-        @for(session of eventsInCart().sessions; track session) {
-            <li>{{ session.date | date:'dd/MM/yyyy' }} - {{ totalTickets }} ticket(s)
-                <button (click)="removeEvent(eventsInCart().event.id, eventsInCart().sessions.indexOf(session))" class="delete-button">
-                    <img src="/images/trash.png" alt="Delete" width="20" height="20" />
-                </button>
-            </li>
+    <mat-card class="cart__container">
+        <h2>Shopping Cart</h2>
+        @if(cartItems.length === 0) {
+            <p>No tickets selected in the cart.</p>
         }
-    </ul>
+        <h3>{{ eventTitle }}</h3>
+        <ul>
+            @for(item of cartItems; track item) {
+                <li>{{ item.session.date | date:'dd/MM/yyyy' }} - {{ item.ticketQuantity }} ticket(s)
+                    <button (click)="removeEvent(item.session.date)" class="delete-button">
+                        <img src="/images/trash.png" alt="Delete" width="20" height="20" />
+                    </button>
+                </li>
+            }
+        </ul>
+        <p>Total Tickets: {{ totalTickets }}</p>
+    </mat-card>
 </div>

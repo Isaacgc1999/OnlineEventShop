@@ -1,34 +1,45 @@
 import { DatePipe } from '@angular/common';
 import { Component, input } from '@angular/core';
 import { EventInfo } from '../../../core/models/event-info.model';
+import { Subject, takeUntil } from 'rxjs';
+import { CartService } from '../../../core/services/cart/cart.service';
+import { CartItem } from '../../../core/models/cart.model';
+import { MatCard } from '@angular/material/card';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe, MatCard],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss'
 })
 export class CartComponent {
-  readonly eventsInCart = input.required<EventInfo>();
+   cartItems: CartItem[] = [];
+  eventTitle: string = '';
+  private readonly destroy$ = new Subject<void>();
 
-  removeEvent(eventIndex: string, sessionIndex: number): void {
-    const session = this.eventsInCart().sessions[Number(eventIndex)];
-    let quantity = +session.availability;
+  constructor(private cartService: CartService) { }
 
-    if (quantity > 1) {
-      session.availability = (quantity - 1).toString();
-    } else {
-      this.eventsInCart().sessions.splice(sessionIndex, 1);
-      if (this.eventsInCart().sessions.length === 0) {
-        this.eventsInCart().sessions.splice(Number(eventIndex), 1);
-      }
-    }
+  ngOnInit(): void {
+    this.cartService.cartItems$.pipe(takeUntil(this.destroy$)).subscribe(items => {
+      this.cartItems = items;
+    });
+
+    this.cartService.eventInfo$.pipe(takeUntil(this.destroy$)).subscribe(eventInfo => {
+      this.eventTitle = eventInfo?.event?.title || '';
+    });
+  }
+
+  removeEvent(sessionDate: string): void {
+    this.cartService.removeItemFromCart(sessionDate);
   }
 
   get totalTickets(): number {
-    return this.eventsInCart().sessions.reduce((acc, event) => {
-      return acc + (+event.availability || 0);
-        }, 0)
+    return this.cartService.getTotalTickets();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

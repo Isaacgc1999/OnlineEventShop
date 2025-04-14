@@ -1,11 +1,12 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, inject, input, output } from '@angular/core';
+import { Component, EventEmitter, inject, input, Output, output } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { NumberInputComponent } from '../../../shared/components/number-input/number-input.component';
 import { FormsModule } from '@angular/forms';
 import { Session } from '../../../core/models/event-info.model';
-import { CatalogueService } from '../../../core/services/catalogue.service';
+import { CatalogueService } from '../../../core/services/catalogue/catalogue.service';
 import { Subject, takeUntil } from 'rxjs';
+import { CartService } from '../../../core/services/cart/cart.service';
 
 
 @Component({
@@ -21,6 +22,7 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class CardInfoComponent {
   private catalogueService = inject(CatalogueService);
+  private cartService = inject(CartService);
 
   private readonly destroy$ = new Subject<void>();
   isLoading: boolean = true;
@@ -28,7 +30,9 @@ export class CardInfoComponent {
   readonly numInputSelection = output<{num: number, session: Session}>();
   readonly eventId = input<string | null>();
   eventInfo?: Session[];
-
+  selectedTickets: { [sessionId: string]: number } = {};
+  readonly ticketChange = output<{ session: Session; quantityChange: number }>();
+  
   ngOnInit(){
     const eventId = this.eventId();
       if (eventId) {
@@ -42,6 +46,7 @@ export class CardInfoComponent {
       .subscribe({
         next: (details) => {
           this.eventInfo = details.sessions.sort((a, b) => Number(a.date) - Number(b.date));
+          this.cartService.setEventInfo(details);
           this.isLoading = false;
         },
         error: (error) => {
@@ -52,8 +57,11 @@ export class CardInfoComponent {
       });
   }
 
-  onChangedValue(num: number, session: Session){
-    this.numInputSelection.emit({num, session});
+  onChangedValue(newValue: number, session: Session) {
+    const previousValue = this.selectedTickets[session.date] || 0;
+    const quantityChange = newValue - previousValue;
+    this.selectedTickets[session.date] = newValue;
+    this.cartService.addItemToCart(session.date, quantityChange);
   }
 
   ngOnDestroy(): void {

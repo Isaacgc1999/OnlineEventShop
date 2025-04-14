@@ -1,18 +1,29 @@
 .info-container{
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(2, 1fr);
-    align-items: center;
+    display: flex;
     justify-content: center;
+    padding: 2rem;
 
-    @media (min-width: 769px) {
-        gap: 1rem;
-        align-items: center;
-    }
+    &__elements{
+        display: grid;
+        gap: 1.5rem;
+        grid-template-columns: repeat(2, 1fr);
+        justify-content: center;
+        
+        @media (min-width: 769px) {
+            gap: 2.5rem;
+            // align-items: center;
+            
+        }
+    
+        @media (max-width: 768px) {
+            display: flex;
+            flex-direction: column;
+            // align-items: center;
+        }
 
-    @media (max-width: 768px) {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        .cart{
+            display: flex;
+            justify-content: center;
+        }
     }
 }

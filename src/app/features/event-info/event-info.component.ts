@@ -3,7 +3,7 @@ import { CardInfoComponent } from './card-info/card-info.component';
 import { CartComponent } from "../../shared/components/cart/cart.component";
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { CatalogueService } from '../../core/services/catalogue.service';
+import { CatalogueService } from '../../core/services/catalogue/catalogue.service';
 import { EventInfo } from '../../core/models/event-info.model';
 
 @Component({
