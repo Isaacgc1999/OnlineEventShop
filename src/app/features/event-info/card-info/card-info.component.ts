@@ -3,9 +3,8 @@ import { Component, inject, input, output } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { NumberInputComponent } from '../../../shared/components/number-input/number-input.component';
 import { FormsModule } from '@angular/forms';
-import { EventInfo, Session } from '../../../core/models/event-info.model';
+import { Session } from '../../../core/models/event-info.model';
 import { CatalogueService } from '../../../core/services/catalogue.service';
-import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 
 
@@ -22,24 +21,19 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class CardInfoComponent {
   private catalogueService = inject(CatalogueService);
-  private route = inject(ActivatedRoute);
 
   private readonly destroy$ = new Subject<void>();
   isLoading: boolean = true;
 
-
   readonly numInputSelection = output<{num: number, session: Session}>();
-
-  eventId = this.route.snapshot.paramMap.get('id');
+  readonly eventId = input<string | null>();
   eventInfo?: Session[];
 
   ngOnInit(){
-    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
-      this.eventId = params.get('id');
-      if (this.eventId) {
-        this.loadEventDetails(this.eventId);
+    const eventId = this.eventId();
+      if (eventId) {
+        this.loadEventDetails(eventId);
       }
-    });
   }
 
   loadEventDetails(id: string): void {

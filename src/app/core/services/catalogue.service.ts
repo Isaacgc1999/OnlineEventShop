@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Event } from '../models/event.model';
-import { delay, Observable, of } from 'rxjs';
+import { delay, map, Observable, of } from 'rxjs';
 import { EventInfo } from '../models/event-info.model';
 
 @Injectable({
@@ -16,6 +16,13 @@ export class CatalogueService {
 
   getEvents(): Observable<Event[]>{
     return this.httpClient.get<Event[]>(this.mockApiUrl).pipe(delay(500));
+  }
+
+  getEventById(eventId: string): Observable<Event[]>{
+    return this.httpClient.get<Event[]>(this.mockApiUrl).pipe(
+      delay(500),
+      map((events: Event[]) => events.filter(event => event.id === eventId))
+    );
   }
 
   getEventDetails(eventId: string): Observable<EventInfo> {
