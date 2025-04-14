@@ -4,12 +4,13 @@ import { EventInfo } from '../../../core/models/event-info.model';
 import { Subject, takeUntil } from 'rxjs';
 import { CartService } from '../../../core/services/cart/cart.service';
 import { CartItem } from '../../../core/models/cart.model';
-import { MatCard } from '@angular/material/card';
+import { MatCard, MatCardModule } from '@angular/material/card';
+import { MatIconButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [DatePipe, MatCard],
+  imports: [DatePipe, MatCardModule, MatIconButton],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss'
 })
