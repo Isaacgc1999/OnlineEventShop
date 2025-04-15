@@ -1,7 +1,7 @@
 import { Component, inject} from '@angular/core';
 import { CardInfoComponent } from './card-info/card-info.component';
 import { CartComponent } from "../../shared/components/cart/cart.component";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { CatalogueService } from '../../core/services/catalogue/catalogue.service';
 import { EventInfo } from '../../core/models/event-info.model';
@@ -10,7 +10,7 @@ import { CartService } from '../../core/services/cart/cart.service';
 @Component({
   selector: 'app-event-info',
   standalone: true,
-  imports: [CardInfoComponent, CartComponent],
+  imports: [CardInfoComponent, CartComponent, RouterLink],
   templateUrl: './event-info.component.html',
   styleUrl: './event-info.component.scss'
 })
