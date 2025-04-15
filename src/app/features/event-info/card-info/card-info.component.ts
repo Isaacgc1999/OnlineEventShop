@@ -91,10 +91,12 @@ export class CardInfoComponent {
   }
 
   onChangedValue(newValue: number, session: Session) {
-    // const previousValue = this.selectedTickets[session.date] || 0;
+    const previousValue = this.selectedTickets[session.date] || 0;
     // const quantityChange = newValue - previousValue;
     this.selectedTickets[session.date] = newValue;
-    this.cartService.addEventToCart(session.date, newValue);
+    if(previousValue !== newValue) {
+      this.cartService.addEventToCart(session.date, newValue);
+    }
   }
 
   ngOnDestroy(): void {

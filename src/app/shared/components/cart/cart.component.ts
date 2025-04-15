@@ -23,8 +23,9 @@ export class CartComponent {
 
   ngOnInit(): void {
     this.cartService.cartByEventItems$.pipe(takeUntil(this.destroy$)).subscribe(items => {
-      this.cartItemsByEvent = items ?? [];
-      console.log(this.cartItemsByEvent);
+      if(items && items.length > 0) {
+        this.cartItemsByEvent = items ?? [];
+      }
     });
   }
 

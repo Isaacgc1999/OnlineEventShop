@@ -7,11 +7,6 @@ import { EventInfo, Session } from '../../models/event-info.model';
   providedIn: 'root'
 })
 export class CartService {
-  // private cartItems = new BehaviorSubject<CartItem[]>([]);
-  // get cartItems$(): Observable<CartItem[]> {
-  //   return this.cartItems.asObservable();
-  // }
-
   private eventInfo = new BehaviorSubject<EventInfo | null>(null);
   get eventInfo$(): Observable<EventInfo | null> {
     return this.eventInfo.asObservable();
