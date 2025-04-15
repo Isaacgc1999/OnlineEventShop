@@ -1,41 +1,38 @@
-import { DatePipe } from '@angular/common';
-import { Component, input } from '@angular/core';
-import { EventInfo } from '../../../core/models/event-info.model';
+import { CommonModule, DatePipe } from '@angular/common';
+import { Component, output } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { CartService } from '../../../core/services/cart/cart.service';
-import { CartItem } from '../../../core/models/cart.model';
-import { MatCard, MatCardModule } from '@angular/material/card';
+import { CartItem, EventCart } from '../../../core/models/cart.model';
+import { MatCardModule } from '@angular/material/card';
 import { MatIconButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [DatePipe, MatCardModule, MatIconButton],
+  imports: [DatePipe, MatCardModule, MatIconButton, CommonModule],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss'
 })
 export class CartComponent {
-  cartItems: CartItem[] = [];
+  cartItemsByEvent: EventCart[] = [];
+  sessions?: CartItem;
   eventTitle: string = '';
   private readonly destroy$ = new Subject<void>();
 
   constructor(private cartService: CartService) { }
 
   ngOnInit(): void {
-    this.cartService.cartItems$.pipe(takeUntil(this.destroy$)).subscribe(items => {
-      this.cartItems = items ?? [];
-    });
-
-    this.cartService.eventInfo$.pipe(takeUntil(this.destroy$)).subscribe(eventInfo => {
-      this.eventTitle = eventInfo?.event?.title || '';
+    this.cartService.cartByEventItems$.pipe(takeUntil(this.destroy$)).subscribe(items => {
+      this.cartItemsByEvent = items ?? [];
+      console.log(this.cartItemsByEvent);
     });
   }
 
-  removeEvent(sessionDate: string): void {
-    this.cartService.removeItemFromCart(sessionDate);
+  removeEvent(id: string, sessionDate: string): void {
+    this.cartService.removeItemFromCart(id, sessionDate);
   }
 
-  get totalTickets(): number {
+  totalTickets(): number {
     return this.cartService.getTotalTickets();
   }
 

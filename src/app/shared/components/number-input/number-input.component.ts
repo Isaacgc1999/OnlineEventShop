@@ -17,6 +17,11 @@ export class NumberInputComponent {
     this.emitValue();
   }
 
+  reset(): void {
+    this.currentValue = 0;
+    this.emitValue();
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     const currentMaxValue = Number(this.maxValue());
     if (changes['maxValue']) {

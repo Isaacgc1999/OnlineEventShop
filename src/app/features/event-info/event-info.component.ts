@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { CatalogueService } from '../../core/services/catalogue/catalogue.service';
 import { EventInfo } from '../../core/models/event-info.model';
+import { CartService } from '../../core/services/cart/cart.service';
 
 @Component({
   selector: 'app-event-info',
@@ -15,15 +16,19 @@ import { EventInfo } from '../../core/models/event-info.model';
 })
 export class EventInfoComponent{
   private route = inject(ActivatedRoute);
+  private catalogueService = inject(CatalogueService);
+  private cartService = inject(CartService);
   eventId: string | null = this.route.snapshot.paramMap.get('id');
   eventInfo: EventInfo = {} as EventInfo;
   private readonly destroy$ = new Subject<void>();
-  private catalogueService = inject(CatalogueService);
   numTicketsSelected: number = 0;
 
   ngOnInit(){
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.eventId = params.get('id');
+      if(this.eventId) {
+        this.cartService.setCurrentEventId(this.eventId);
+      }
     });
     if (this.eventId) {
       this.getEventInfo(this.eventId);

@@ -1,22 +1,28 @@
 <div class="cart">
     <mat-card class="cart__container">
         <h2>Shopping Cart</h2>
-        @if(cartItems.length === 0) {
+        @if(cartItemsByEvent.length === 0) {
             <p>No tickets selected in the cart.</p>
         }
-        <h3>{{ eventTitle }}</h3>
         <ul>
-            @if(cartItems){
-                @for(item of cartItems; track item) {
-                    <li>{{ item.session.date | date:'dd/MM/yyyy' }} - {{ item.ticketQuantity }} ticket(s)
-                        <button mat-icon-button (click)="removeEvent(item.session.date)" class="delete-button">
-                            <img src="/images/trash.png" alt="Delete" width="20" height="20" />
-                        </button>
-                    </li>
+            @if(cartItemsByEvent){
+                @for(item of cartItemsByEvent; track item.eventId) {
+                    @if(item.cart.length > 0) {
+                        <li class="cart__container__event">
+                            <h4>{{item.eventTitle}}</h4>
+                        </li>
+                    }
+                    @for(cart of item.cart; track cart){
+                        <li>{{ cart.session.date | date:'dd/MM/yyyy' }} - {{ cart.ticketQuantity }} ticket(s)
+                            <button mat-icon-button (click)="removeEvent(item.eventId, cart.session.date)" class="delete-button">
+                                <img src="/images/trash.png" alt="Delete" width="20" height="20" />
+                            </button>
+                        </li>
+                    }
                 }
             }
             </ul>
-            <p>Total Tickets: {{ totalTickets }}</p>
+            <p>Total Tickets: {{ totalTickets() }}</p>
 
     </mat-card>
 </div>

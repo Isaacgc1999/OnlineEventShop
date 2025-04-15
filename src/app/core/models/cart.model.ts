@@ -6,5 +6,7 @@ export interface CartItem {
 }
 
 export interface EventCart {
-    [eventId: string]: CartItem[];
+    eventId: string;
+    eventTitle: string;
+    cart: CartItem[];
 }

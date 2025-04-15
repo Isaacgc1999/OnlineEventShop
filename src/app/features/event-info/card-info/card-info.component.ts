@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, EventEmitter, inject, input, Output, output } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { NumberInputComponent } from '../../../shared/components/number-input/number-input.component';
 import { FormsModule } from '@angular/forms';
@@ -7,7 +7,7 @@ import { Session } from '../../../core/models/event-info.model';
 import { CatalogueService } from '../../../core/services/catalogue/catalogue.service';
 import { Subject, takeUntil } from 'rxjs';
 import { CartService } from '../../../core/services/cart/cart.service';
-import { CartItem } from '../../../core/models/cart.model';
+import { CartItem, EventCart } from '../../../core/models/cart.model';
 
 
 @Component({
@@ -33,31 +33,42 @@ export class CardInfoComponent {
   selectedTickets: { [sessionId: string]: number } = {};
 
   savedCartItems: CartItem[] = [];
-  
+  savedCartEventItems: EventCart[] = [];
+
   ngOnInit(){
-    const saved = localStorage.getItem('cartItems');
-    try {
-      const parsed = saved ? JSON.parse(saved) : [];
-      this.savedCartItems = Array.isArray(parsed) ? parsed : [];
-    } catch (error) {
-      console.error('Error parsing cartItems from localStorage:', error);
-      this.savedCartItems = [];
-    }
-  
     const eventId = this.eventId();
     if (eventId) {
       this.loadEventDetails(eventId);
     }
+    const savedItems = localStorage.getItem('cartByEventItems');
+    try {
+      const parsedItems = savedItems ? JSON.parse(savedItems) : [];
+      this.savedCartEventItems = Array.isArray(parsedItems) ? parsedItems : [];
+      console.log(this.savedCartEventItems);
+    } catch (error) {
+      console.error('Error parsing cartEventItems from localStorage:', error);
+      this.savedCartEventItems = [];
+    } 
   }
 
   getRealInfo(){
-    this.eventInfo?.forEach((session) => {
-      const savedItem = this.savedCartItems.find(item => item.session.date === session.date);
-      if (savedItem) {
-        session.availability = (Number(session.availability) - savedItem.ticketQuantity).toString();
-      } else {
-        this.selectedTickets[session.date] = 0;
+    this.eventInfo = this.eventInfo?.map(session => {
+      const eventCart = this.savedCartEventItems.find(
+        eventCartItem => eventCartItem.eventId === this.eventId()
+      );
+
+      if(eventCart){
+        const cartItem = eventCart.cart.find(item => item.session.date === session.date);
+
+        if(cartItem){
+          const currentAvailability = Number(session.availability);
+          const ticketsInCart = cartItem.ticketQuantity;
+          const updatedAvailability = currentAvailability - ticketsInCart;
+          console.log('Updated availability:', updatedAvailability);
+          return { ...session, availability: updatedAvailability.toString() };
+        }
       }
+      return session;
     });
   }
 
@@ -80,10 +91,10 @@ export class CardInfoComponent {
   }
 
   onChangedValue(newValue: number, session: Session) {
-    const previousValue = this.selectedTickets[session.date] || 0;
-    const quantityChange = newValue - previousValue;
+    // const previousValue = this.selectedTickets[session.date] || 0;
+    // const quantityChange = newValue - previousValue;
     this.selectedTickets[session.date] = newValue;
-    this.cartService.addItemToCart(session.date, quantityChange);
+    this.cartService.addEventToCart(session.date, newValue);
   }
 
   ngOnDestroy(): void {
