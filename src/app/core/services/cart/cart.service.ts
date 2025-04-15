@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { CartItem } from '../../models/cart.model';
 import { EventInfo } from '../../models/event-info.model';
 
@@ -8,19 +8,30 @@ import { EventInfo } from '../../models/event-info.model';
 })
 export class CartService {
   private cartItems = new BehaviorSubject<CartItem[]>([]);
-  readonly cartItems$ = this.cartItems.asObservable();
+  get cartItems$(): Observable<CartItem[]> {
+    return this.cartItems.asObservable();
+  }
 
   private eventInfo = new BehaviorSubject<EventInfo | null>(null);
-  readonly eventInfo$ = this.eventInfo.asObservable();
+  get eventInfo$(): Observable<EventInfo | null> {
+    return this.eventInfo.asObservable();
+  }
 
   constructor(){
     const storedCartItems = localStorage.getItem('cartItems');
-    if (storedCartItems) {
-      this.cartItems.next(JSON.parse(storedCartItems));
-    }
-    const storedEventInfo = localStorage.getItem('eventInfo');
-    if (storedEventInfo) {
-      this.eventInfo.next(JSON.parse(storedEventInfo));
+    try {
+      const parsedCart = JSON.parse(storedCartItems || '[]');
+      if (Array.isArray(parsedCart)) {
+        this.cartItems.next(parsedCart);
+      } else {
+        console.warn('Invalid cartItems in localStorage, resetting...');
+        this.cartItems.next([]);
+        localStorage.removeItem('cartItems');
+      }
+    } catch (e) {
+      console.error('Error parsing cartItems from localStorage:', e);
+      this.cartItems.next([]);
+      localStorage.removeItem('cartItems');
     }
   }
 
@@ -94,6 +105,13 @@ export class CartService {
   }
 
   getTotalTickets(): number {
-    return this.cartItems.getValue().reduce((total, item) => total + item.ticketQuantity, 0);
+    const currentCart = this.cartItems.getValue();
+
+    if (!Array.isArray(currentCart)) {
+      console.error('Cart is not an array:', currentCart);
+      return 0;
+    }
+  
+    return currentCart.reduce((total, item) => total + item.ticketQuantity, 0);
   }
 }

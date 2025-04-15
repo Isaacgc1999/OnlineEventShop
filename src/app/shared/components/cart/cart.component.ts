@@ -23,7 +23,7 @@ export class CartComponent {
 
   ngOnInit(): void {
     this.cartService.cartItems$.pipe(takeUntil(this.destroy$)).subscribe(items => {
-      this.cartItems = items;
+      this.cartItems = items ?? [];
     });
 
     this.cartService.eventInfo$.pipe(takeUntil(this.destroy$)).subscribe(eventInfo => {

@@ -35,12 +35,19 @@ export class CardInfoComponent {
   savedCartItems: CartItem[] = [];
   
   ngOnInit(){
+    const saved = localStorage.getItem('cartItems');
+    try {
+      const parsed = saved ? JSON.parse(saved) : [];
+      this.savedCartItems = Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      console.error('Error parsing cartItems from localStorage:', error);
+      this.savedCartItems = [];
+    }
+  
     const eventId = this.eventId();
-      if (eventId) {
-        this.loadEventDetails(eventId);
-      }
-
-      this.savedCartItems = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')!) : [];
+    if (eventId) {
+      this.loadEventDetails(eventId);
+    }
   }
 
   getRealInfo(){
