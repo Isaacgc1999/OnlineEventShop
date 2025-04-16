@@ -53,16 +53,6 @@ describe('CardInfoComponent', () => {
     (component as any).eventId = () => '68';
   });
 
-  // it('should load event details and sort sessions', () => {
-  //   mockCatalogueService.getEventDetails.and.returnValue(of(mockEventInfo));
-  //   localStorage.setItem('cartByEventItems', JSON.stringify([]));
-
-  //   fixture.detectChanges();
-
-  //   expect(component.eventInfo?.length).toBe(2);
-  //   expect(component.isLoading).toBeFalse();
-  // });
-
   it('should handle error when loading event details', () => {
     mockCatalogueService.getEventDetails.and.returnValue(throwError(() => new Error('Error')));
 

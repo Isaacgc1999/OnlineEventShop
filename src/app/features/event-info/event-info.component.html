@@ -1,6 +1,11 @@
 <div class="info-container">
-    <div class="info-container__elements">
-        <app-card-info class="info" [eventId]="eventId"></app-card-info>
-        <app-cart class="cart"></app-cart>
+    <div class="info-container__return">
+        <app-button class="info-container__return__button" [text]="'Back'" [routerLink]="'/'"></app-button>
+    </div>
+    <div class="info-container__event">
+        <div class="info-container__event__elements">
+            <app-card-info class="info" [eventId]="eventId"></app-card-info>
+            <app-cart class="cart"></app-cart>
+        </div>
     </div>
 </div>

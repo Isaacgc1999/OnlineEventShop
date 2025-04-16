@@ -108,14 +108,4 @@ describe('EventInfoComponent', () => {
     expect(mockCartService.setCurrentEventId).toHaveBeenCalledWith(newEventId);
     expect(mockCatalogueService.getEventDetails).toHaveBeenCalledWith(newEventId);
   });
-
-  // it('should unsubscribe from route params on ngOnDestroy', () => {
-  //   spyOn(destroy$, 'next');
-  //   spyOn(destroy$, 'complete');
-
-  //   component.ngOnDestroy();
-
-  //   // expect(destroy$.next).toHaveBeenCalled();
-  //   expect(destroy$.complete).toHaveBeenCalled();
-  // });
 });
