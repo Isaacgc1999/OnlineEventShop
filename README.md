@@ -19,6 +19,12 @@ Is a web application developed with **Angular 19** that allows users to view eve
 | TypeScript         | Strict typing                               |
 
 ---
+## ⚽ Playground (run without installing or downloading anything)
+https://stackblitz.com/~/github.com/Isaacgc1999/OnlineEventShop
+
+## 📷 Screenshots
+![image](https://github.com/user-attachments/assets/0a449bca-310a-4a91-8f77-99258f9a0ed5)
+![image](https://github.com/user-attachments/assets/38ccaf7e-da91-43fa-9009-461dd055f7d4)
 
 ## 🧱 Project Architecture
 ```
@@ -200,7 +206,5 @@ The layout automatically adjusts based on the screen size. It uses a combination
 - **CSS Grid and Flexbox**: For organizing event cards and sessions
 - **Media Queries**: To handle changes for small, medium, and large screen sizes
 
-## 📷 Screenshots
-![image](https://github.com/user-attachments/assets/0a449bca-310a-4a91-8f77-99258f9a0ed5)
-![image](https://github.com/user-attachments/assets/38ccaf7e-da91-43fa-9009-461dd055f7d4)
+
 
