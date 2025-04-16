@@ -148,7 +148,6 @@ export class CartService {
     });
   
     this.cartByEventItems.next([]);
-    // this._resetNumberInput.next();
     localStorage.removeItem('cartByEventItems');
   }
 
