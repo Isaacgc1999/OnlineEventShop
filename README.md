@@ -77,16 +77,16 @@ OnlineEventShop/
 │   │   │   │   │   ├── cart.component.scss
 │   │   │   │   │   ├── cart.component.spec.ts
 │   │   │   │   │   └── cart.component.ts
-│   │   │   │   ├── header/
-│   │   │   │   │   ├── header.component.html
-│   │   │   │   │   ├── header.component.scss
-│   │   │   │   │   ├── header.component.spec.ts
-│   │   │   │   │   └── header.component.ts
 │   │   │   │   └── number-input/
 │   │   │   │       ├── number-input.component.html
 │   │   │   │       ├── number-input.component.scss
 │   │   │   │       ├── number-input.component.spec.ts
 │   │   │   │       └── number-input.component.ts
+│   │   │   ├── header/
+│   │   │   │   ├── header.component.html
+│   │   │   │   ├── header.component.scss
+│   │   │   │   ├── header.component.spec.ts
+│   │   │   │   └── header.component.ts
 │   │   │   └── colors.scss
 │   │   ├── app.component.html
 │   │   ├── app.component.scss
@@ -94,21 +94,7 @@ OnlineEventShop/
 │   │   ├── app.component.ts
 │   │   ├── app.config.ts
 │   │   └── app.routes.ts
-│   ├── environments/
-│   │   ├── environment.development.ts
-│   │   ├── environment.prod.ts
-│   │   └── environment.ts
-│   ├── index.html
-│   ├── main.ts
-│   ├── styles.scss
-│   ├── test.ts
-│   ├── tsconfig.app.json
-│   ├── tsconfig.json
-│   └── tsconfig.spec.json
-├── .editorconfig
-├── .gitignore
-├── angular.json
-└── package-lock.json
+... #Other configuration files
 ```
 
 ## 🧑‍💻 Features
