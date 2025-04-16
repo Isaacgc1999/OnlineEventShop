@@ -1,14 +1,14 @@
 <mat-card  class="custom-card" appearance="outlined">
     <mat-card-header class="custom-card__header">
-        <mat-card-title class="custom-card__header__title" (click)="onClick()">{{title()}}</mat-card-title>
+        <mat-card-title class="custom-card__header__title" (click)="onClick()">{{event()?.title}}</mat-card-title>
         <div class="custom-card__header__subtitle">
-            <mat-card-subtitle class="text" (click)="onClick()">{{subtitle()}}</mat-card-subtitle>
+            <mat-card-subtitle class="text" (click)="onClick()">{{event()?.subtitle}}</mat-card-subtitle>
         </div>
         <img mat-card-image src="/images/sample-image.jpg" alt="Event Image" class="custom-card__content__image" (click)="onClick()"/>
     </mat-card-header>
     <mat-card-content class="custom-card__content">
-        <p class="custom-card__content__dates">{{startDate() | date:'dd/MM/yyyy'}} - {{endDate() | date:'dd/MM/yyyy'}}</p>
-        <p class="custom-card__content__description" [innerHTML]="description()"></p>
+        <p class="custom-card__content__dates">{{event()?.startDate | date:'dd/MM/yyyy'}} - {{event()?.endDate | date:'dd/MM/yyyy'}}</p>
+        <p class="custom-card__content__description" [innerHTML]="event()?.description"></p>
     </mat-card-content>
     <mat-card-actions>
         <app-button class="custom-card__button" [text]="'Buy'" (click)="onClick()"></app-button>

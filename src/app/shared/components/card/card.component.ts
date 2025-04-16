@@ -2,6 +2,7 @@ import { Component, input, output } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { ButtonComponent } from "../button/button.component";
 import { DatePipe } from '@angular/common';
+import { Event } from '../../../core/models/event.model';
 
 @Component({
   selector: 'app-card',
@@ -12,14 +13,7 @@ import { DatePipe } from '@angular/common';
 })
 export class CardComponent {
 
-  //cambiarlo a event
   readonly event = input<Event>();
-  readonly title = input<string>();
-  readonly subtitle = input<string>();
-  readonly description = input<string>();
-  readonly image = input<string>();
-  readonly startDate = input<string>();
-  readonly endDate = input<string>();
   readonly click = output<void>();
 
   onClick(){
