@@ -24,7 +24,8 @@ https://stackblitz.com/~/github.com/Isaacgc1999/OnlineEventShop
 
 ## 📷 Screenshots
 ![image](https://github.com/user-attachments/assets/0a449bca-310a-4a91-8f77-99258f9a0ed5)
-![Uploading image.png…]()
+![image](https://github.com/user-attachments/assets/92956bf8-738d-4493-9593-9a507e4d553c)
+
 
 
 
