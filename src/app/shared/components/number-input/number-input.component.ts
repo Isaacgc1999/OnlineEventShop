@@ -49,7 +49,6 @@ export class NumberInputComponent implements OnInit, OnDestroy{
     this.valueChange.emit(valueChange);
   }
 
-  // //meterle id para pasarle el elemento a quitar num
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['cartService'] && changes['cartService'].currentValue === null) {
       this.subscribeToCartChanges();
