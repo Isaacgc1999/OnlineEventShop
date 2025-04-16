@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, take } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, take } from 'rxjs';
 import { CartItem, EventCart } from '../../models/cart.model';
 import { EventInfo, Session } from '../../models/event-info.model';
 
@@ -22,17 +22,15 @@ export class CartService {
     return this.currentEventId.asObservable();
   }
 
-  setCurrentEventId(eventId: string | null): void {
-    this.currentEventId.next(eventId);
-  }
-
+  private _resetNumberInput = new Subject<void>();
+  readonly resetNumberInput$ = this._resetNumberInput.asObservable();
+  
   constructor(){
     const storedCartEventItems = localStorage.getItem('cartByEventItems');
     try {
       const parsedCart = JSON.parse(storedCartEventItems || '[]');
       if (Array.isArray(parsedCart)) {
         this.cartByEventItems.next(parsedCart);
-        console.log("localStorage",parsedCart);
       } else {
         console.warn('Invalid cartItems in localStorage, resetting...');
         this.cartByEventItems.next([]);
@@ -45,6 +43,10 @@ export class CartService {
     }
   }
 
+  setCurrentEventId(eventId: string | null): void {
+    this.currentEventId.next(eventId);
+  }
+  
   setEventInfo(eventInfo: EventInfo): void {
     this.eventInfo.next(eventInfo);
   }
@@ -77,9 +79,9 @@ export class CartService {
         const existingItem = eventCart[existingItemIndex];
         existingItem.ticketQuantity = quantityTickets;
   
-        if (existingItem.ticketQuantity <= 0) {
-          eventCart.splice(existingItemIndex, 1);
-        }
+      if (existingItem.ticketQuantity <= 0) {
+        eventCart.splice(existingItemIndex, 1);
+      }
       } else if (quantityTickets > 0) {
         eventCart.push({ session: sessionToAdd, ticketQuantity: quantityTickets });
       }
@@ -127,7 +129,8 @@ export class CartService {
   
         this.cartByEventItems.next(newCartByEvent);
         localStorage.setItem('cartByEventItems', JSON.stringify(newCartByEvent));
-        this.updateAvailability(sessionDate, +1); 
+        this._resetNumberInput.next();
+        // this.updateAvailability(sessionDate, +1); 
       } else {
         console.warn(`Session with date ${sessionDate} not found in the cart for event ${eventId}.`);
       }
@@ -146,6 +149,7 @@ export class CartService {
     });
   
     this.cartByEventItems.next([]);
+    // this._resetNumberInput.next();
     localStorage.removeItem('cartByEventItems');
   }
 

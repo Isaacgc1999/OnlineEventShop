@@ -44,16 +44,15 @@ export class CardInfoComponent {
     try {
       const parsedItems = savedItems ? JSON.parse(savedItems) : [];
       this.savedCartEventItems = Array.isArray(parsedItems) ? parsedItems : [];
-      console.log(this.savedCartEventItems);
     } catch (error) {
       console.error('Error parsing cartEventItems from localStorage:', error);
       this.savedCartEventItems = [];
     } 
   }
 
-  getRealInfo(){
+  getRealInfo(): void{
     this.eventInfo = this.eventInfo?.map(session => {
-      const eventCart = this.savedCartEventItems.find(
+      const eventCart: EventCart | undefined = this.savedCartEventItems.find(
         eventCartItem => eventCartItem.eventId === this.eventId()
       );
 
@@ -64,7 +63,6 @@ export class CardInfoComponent {
           const currentAvailability = Number(session.availability);
           const ticketsInCart = cartItem.ticketQuantity;
           const updatedAvailability = currentAvailability - ticketsInCart;
-          console.log('Updated availability:', updatedAvailability);
           return { ...session, availability: updatedAvailability.toString() };
         }
       }
@@ -90,12 +88,11 @@ export class CardInfoComponent {
       });
   }
 
-  onChangedValue(newValue: number, session: Session) {
+  onChangedValue(valueChange: number, session: Session): void {
     const previousValue = this.selectedTickets[session.date] || 0;
-    this.selectedTickets[session.date] = newValue;
-    if(previousValue !== newValue) {
-      this.cartService.addEventToCart(session.date, newValue);
-    }
+    const value = previousValue + valueChange;
+    this.selectedTickets[session.date] = value;
+    this.cartService.addEventToCart(session.date, value);
   }
 
   ngOnDestroy(): void {

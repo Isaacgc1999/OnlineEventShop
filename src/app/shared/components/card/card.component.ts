@@ -11,6 +11,9 @@ import { DatePipe } from '@angular/common';
   styleUrl: './card.component.scss'
 })
 export class CardComponent {
+
+  //cambiarlo a event
+  readonly event = input<Event>();
   readonly title = input<string>();
   readonly subtitle = input<string>();
   readonly description = input<string>();

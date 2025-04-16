@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, output } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { CartService } from '../../../core/services/cart/cart.service';
 import { CartItem, EventCart } from '../../../core/models/cart.model';
@@ -18,8 +18,7 @@ export class CartComponent {
   sessions?: CartItem;
   eventTitle: string = '';
   private readonly destroy$ = new Subject<void>();
-
-  constructor(private cartService: CartService) { }
+  private cartService = inject(CartService);
 
   ngOnInit(): void {
     this.cartService.cartByEventItems$.pipe(takeUntil(this.destroy$)).subscribe(items => {

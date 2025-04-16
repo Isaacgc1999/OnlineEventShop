@@ -1,7 +1,7 @@
 import { Component, inject} from '@angular/core';
 import { CardInfoComponent } from './card-info/card-info.component';
 import { CartComponent } from "../../shared/components/cart/cart.component";
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { CatalogueService } from '../../core/services/catalogue/catalogue.service';
 import { EventInfo } from '../../core/models/event-info.model';
@@ -10,7 +10,7 @@ import { CartService } from '../../core/services/cart/cart.service';
 @Component({
   selector: 'app-event-info',
   standalone: true,
-  imports: [CardInfoComponent, CartComponent, RouterLink],
+  imports: [CardInfoComponent, CartComponent],
   templateUrl: './event-info.component.html',
   styleUrl: './event-info.component.scss'
 })
@@ -21,7 +21,6 @@ export class EventInfoComponent{
   eventId: string | null = this.route.snapshot.paramMap.get('id');
   eventInfo: EventInfo = {} as EventInfo;
   private readonly destroy$ = new Subject<void>();
-  numTicketsSelected: number = 0;
 
   ngOnInit(){
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
