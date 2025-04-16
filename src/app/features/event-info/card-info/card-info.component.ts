@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { NumberInputComponent } from '../../../shared/components/number-input/number-input.component';
 import { FormsModule } from '@angular/forms';
@@ -19,12 +19,14 @@ import { CartItem, EventCart } from '../../../core/models/cart.model';
     CommonModule,
     MatCardModule],
   templateUrl: './card-info.component.html',
-  styleUrl: './card-info.component.scss'
+  styleUrl: './card-info.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardInfoComponent {
   private catalogueService = inject(CatalogueService);
   private cartService = inject(CartService);
-
+  private cdr = inject(ChangeDetectorRef);
+  
   private readonly destroy$ = new Subject<void>();
   isLoading: boolean = true;
 
@@ -34,6 +36,8 @@ export class CardInfoComponent {
 
   savedCartItems: CartItem[] = [];
   savedCartEventItems: EventCart[] = [];
+
+  
 
   ngOnInit(){
     const eventId = this.eventId();
@@ -79,11 +83,13 @@ export class CardInfoComponent {
           this.cartService.setEventInfo(details);
           this.getRealInfo();
           this.isLoading = false;
+          this.cdr.markForCheck()
         },
         error: (error) => {
           console.error('EVENT INFO NOT FOUND:', error);
           this.eventInfo = []; 
           this.isLoading = false;
+          this.cdr.markForCheck()
         }
       });
   }
@@ -91,7 +97,11 @@ export class CardInfoComponent {
   onChangedValue(valueChange: number, session: Session): void {
     const previousValue = this.selectedTickets[session.date] || 0;
     const value = previousValue + valueChange;
-    this.selectedTickets[session.date] = value;
+    // this.selectedTickets[session.date] = value;
+    this.selectedTickets = {
+      ...this.selectedTickets,
+      [session.date]: value
+    };
     this.cartService.addEventToCart(session.date, value);
   }
 

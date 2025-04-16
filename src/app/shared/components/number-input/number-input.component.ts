@@ -1,4 +1,4 @@
-import { Component, inject, input, OnChanges, OnDestroy, OnInit, output, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, OnChanges, OnDestroy, OnInit, output, SimpleChanges } from '@angular/core';
 import { CartService } from '../../../core/services/cart/cart.service';
 import { EventCart } from '../../../core/models/cart.model';
 import { Subject, takeUntil } from 'rxjs';
@@ -8,7 +8,8 @@ import { Subject, takeUntil } from 'rxjs';
   standalone: true,
   imports: [],
   templateUrl: './number-input.component.html',
-  styleUrl: './number-input.component.scss'
+  styleUrl: './number-input.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NumberInputComponent implements OnInit, OnDestroy{
   private cartService = inject(CartService);

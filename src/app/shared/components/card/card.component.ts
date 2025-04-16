@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { ButtonComponent } from "../button/button.component";
 import { DatePipe } from '@angular/common';
@@ -9,7 +9,8 @@ import { Event } from '../../../core/models/event.model';
   standalone: true,
   imports: [MatCardModule, ButtonComponent, DatePipe],
   templateUrl: './card.component.html',
-  styleUrl: './card.component.scss'
+  styleUrl: './card.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardComponent {
 
