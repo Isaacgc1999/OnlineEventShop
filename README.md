@@ -24,7 +24,8 @@ https://stackblitz.com/~/github.com/Isaacgc1999/OnlineEventShop
 
 ## 📷 Screenshots
 ![image](https://github.com/user-attachments/assets/0a449bca-310a-4a91-8f77-99258f9a0ed5)
-![image](https://github.com/user-attachments/assets/753f2185-0cb7-4815-9569-9180e3e72082)
+![Uploading image.png…]()
+
 
 
 ## 🧱 Project Architecture
