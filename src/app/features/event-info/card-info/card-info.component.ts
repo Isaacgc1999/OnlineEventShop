@@ -95,14 +95,37 @@ export class CardInfoComponent {
   }
 
   onChangedValue(valueChange: number, session: Session): void {
-    const previousValue = this.selectedTickets[session.date] || 0;
-    const value = previousValue + valueChange;
-    // this.selectedTickets[session.date] = value;
+    const eventId = this.eventId();
+    let baseValue = 0;
+  
+    const savedItemsRaw = localStorage.getItem('cartByEventItems');
+    if (savedItemsRaw) {
+      try {
+        const savedItems: EventCart[] = JSON.parse(savedItemsRaw);
+  
+        const eventCart = savedItems.find(item => item.eventId === eventId);
+        if (eventCart) {
+          const cartItem = eventCart.cart.find(cart => cart.session.date === session.date);
+          if (cartItem) {
+            baseValue = cartItem.ticketQuantity;
+          }
+        }
+      } catch (error) {
+        console.error('Error reading cart from localStorage:', error);
+      }
+    }
+  
+    const inMemoryValue = this.selectedTickets[session.date] || 0;
+    const currentBase = Math.max(baseValue, inMemoryValue); 
+  
+    const updatedValue = currentBase + valueChange;
+  
     this.selectedTickets = {
       ...this.selectedTickets,
-      [session.date]: value
+      [session.date]: updatedValue
     };
-    this.cartService.addEventToCart(session.date, value);
+  
+    this.cartService.addEventToCart(session.date, updatedValue);
   }
 
   ngOnDestroy(): void {
