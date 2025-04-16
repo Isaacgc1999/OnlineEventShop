@@ -1,59 +1,210 @@
-# OnlineEventShop
+# 🎟️ Event Booking App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.7.
+## Event Booking App
 
-## Development server
+Is a web application developed with **Angular 19** that allows users to view events and manage seat reservations through a shopping cart. It is fully responsive, modular, and built with a scalable architecture based on reactive programming.
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
+## 🧰 Tech Stack
+
+| Technology         | Version / Usage                             |
+|--------------------|---------------------------------------------|
+| Angular            | 19                                          |
+| Angular Router     | Navigation between event list and event detail |
+| RxJS               | Reactive communication between services and components |
+| SASS (SCSS)        | Styles with BEM methodology                 |
+| Material Design    | Visual components                           |
+| Angular Signals    | `@input()` / `@output()` reactive signals   |
+| TypeScript         | Strict typing                               |
+
+---
+## ⚽ Playground (run without installing or downloading anything)
+https://stackblitz.com/~/github.com/Isaacgc1999/OnlineEventShop
+
+## 📷 Screenshots
+![image](https://github.com/user-attachments/assets/0a449bca-310a-4a91-8f77-99258f9a0ed5)
+![image](https://github.com/user-attachments/assets/38ccaf7e-da91-43fa-9009-461dd055f7d4)
+
+## 🧱 Project Architecture
+```
+OnlineEventShop/
+├── .angular/
+├── .vscode/
+├── coverage/
+├── node_modules/
+├── public/
+│   └── ... # Static assets (fonts, etc. - based on your file explorer)
+├── src/
+│   ├── app/
+│   │   ├── core/
+│   │   │   ├── models/
+│   │   │   │   ├── cart.model.ts
+│   │   │   │   ├── event-info.model.ts
+│   │   │   │   └── event.model.ts
+│   │   │   ├── services/
+│   │   │   │   ├── cart/
+│   │   │   │   │   ├── cart.service.spec.ts
+│   │   │   │   │   └── cart.service.ts
+│   │   │   │   └── catalogue/
+│   │   │   │       ├── catalogue.service.spec.ts
+│   │   │   │       └── catalogue.service.ts
+│   │   │   └── ... # Other core files
+│   │   ├── features/
+│   │   │   ├── catalogue/
+│   │   │   │   ├── catalogue.component.html
+│   │   │   │   ├── catalogue.component.scss
+│   │   │   │   ├── catalogue.component.spec.ts
+│   │   │   │   └── catalogue.component.ts
+│   │   │   └── event-info/
+│   │   │       ├── card-info/
+│   │   │       │   ├── card-info.component.html
+│   │   │       │   ├── card-info.component.scss
+│   │   │       │   ├── card-info.component.spec.ts
+│   │   │       │   └── card-info.component.ts
+│   │   │       ├── event-info.component.html
+│   │   │       ├── event-info.component.scss
+│   │   │       ├── event-info.component.spec.ts
+│   │   │       └── event-info.component.ts
+│   │   ├── shared/
+│   │   │   ├── components/
+│   │   │   │   ├── button/
+│   │   │   │   │   ├── button.component.html
+│   │   │   │   │   ├── button.component.scss
+│   │   │   │   │   ├── button.component.spec.ts
+│   │   │   │   │   └── button.component.ts
+│   │   │   │   ├── card/
+│   │   │   │   │   ├── card.component.html
+│   │   │   │   │   ├── card.component.scss
+│   │   │   │   │   ├── card.component.spec.ts
+│   │   │   │   │   └── card.component.ts
+│   │   │   │   ├── cart/
+│   │   │   │   │   ├── cart.component.html
+│   │   │   │   │   ├── cart.component.scss
+│   │   │   │   │   ├── cart.component.spec.ts
+│   │   │   │   │   └── cart.component.ts
+│   │   │   │   └── number-input/
+│   │   │   │       ├── number-input.component.html
+│   │   │   │       ├── number-input.component.scss
+│   │   │   │       ├── number-input.component.spec.ts
+│   │   │   │       └── number-input.component.ts
+│   │   │   ├── header/
+│   │   │   │   ├── header.component.html
+│   │   │   │   ├── header.component.scss
+│   │   │   │   ├── header.component.spec.ts
+│   │   │   │   └── header.component.ts
+│   │   │   └── colors.scss
+│   │   ├── app.component.html
+│   │   ├── app.component.scss
+│   │   ├── app.component.spec.ts
+│   │   ├── app.component.ts
+│   │   ├── app.config.ts
+│   │   └── app.routes.ts
+... #Other configuration files
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 🧑‍💻 Features
 
-## Code scaffolding
+### 🗂️ Event List (Catalogue)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- Displays a grid of events:
+  - 📱 1 column on small screens
+  - 💻 2 columns on medium/large screens
+- Event card:
+  - Title, subtitle, place, dates, description, image, and Buy button
+  - Link to event detail view
+- Sorted by end date (ascending order)
 
-```bash
-ng generate component component-name
+### 🎫 Event Detail
+
+- List of available sessions:
+  - One session per row
+  - Date, availability, and seat selection with `+` and `-` buttons
+  - Prevent overflow: does not allow selecting more seats than available
+  - Prevent underflow: does not allow negative values
+- Responsive design:
+  - 100% width on mobile
+  - 50% width on medium/large screens
+- Displays `"EVENT INFO NOT FOUND"` message if no data is available
+
+### 🛒 Shopping Cart
+
+- Reusable across the project
+- Grouped by event
+- Displays:
+  - Event title
+  - Sessions with selected seats and delete button (trash icon)
+- "Back" button to return to the event list
+
+---
+
+## 🎨 Styles
+
+- **SASS + BEM** for maintaining scalable and modular styles
+- Centralized color palette in `colors.scss`:
+```scss
+// colors.scss
+$primary-color: #2a3f54;
+$accent-color: #e91e63;
+$background-color: #f5f5f5;
+$text-color: #333;
+$error-color: #ff5252;
 ```
+## 🧪 Testing
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- Unit tests with Karma and Jasmine
+- Coverage:
+  - Services (`CartService`, `CatalogueService`)
+  - Components (`CartComponent`, `NumberInputComponent`, `EventInfoComponent`, etc.)
+  - `@Input()` / `@Output()` communication with component mocks (`host components`)
+ 
+    ![image](https://github.com/user-attachments/assets/41836d28-1d8d-468d-82a7-ef6002ac1614)
 
-```bash
-ng generate --help
-```
+---
 
-## Building
+## 🚀 How to Run
 
-To build the project run:
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Run in development mode:
+     ```bash
+   ng serve
+   ```
+4. Run tests:
+   ```bash
+   ng test
+   ```
 
-```bash
-ng build
-```
+## 📱 Responsive Layout
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+The project uses a responsive design approach to ensure the application is optimized for all screen sizes:
 
-## Running unit tests
+### **Event List (Catalogue)**:
+- **Small screens**: Single column layout for event cards.
+- **Medium/Large screens**: Two-column grid layout for event cards.
+  
+The event cards adapt to different screen sizes and adjust their layout accordingly, making use of `flexbox` and CSS media queries for dynamic responsiveness.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### **Event Card Content**:
+- **Small screens**: Display event title, subtitle, place, and dates.
+- **Medium/Large screens**: In addition to the previous content, show a short description.
+- Each card is designed to link to the event detail page, providing a smooth and intuitive user experience.
 
-```bash
-ng test
-```
+### **Event Detail View**:
+- **Sessions list**: Each session is shown as a single row, optimized for both small and large screens.
+  - On **small screens**: The sessions list will span 100% of the screen width.
+  - On **medium/large screens**: The sessions list will occupy 50% of the screen width to allow a two-column view.
+  
+- **Cart Section**: The shopping cart is designed to fit within a responsive grid, ensuring it is user-friendly across devices.
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+### Media Queries Implementation:
+The layout automatically adjusts based on the screen size. It uses a combination of:
+- **CSS Grid and Flexbox**: For organizing event cards and sessions
+- **Media Queries**: To handle changes for small, medium, and large screen sizes
 
-```bash
-ng e2e
-```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
