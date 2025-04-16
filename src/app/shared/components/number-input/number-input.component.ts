@@ -13,6 +13,7 @@ import { Subject, takeUntil } from 'rxjs';
 export class NumberInputComponent implements OnInit, OnDestroy{
   private cartService = inject(CartService);
   readonly maxValue = input<string|null>(null);
+  readonly elementToReset = input<string>('');
   readonly valueChange = output<number>();
 
   private readonly destroy$ = new Subject<void>();
@@ -21,23 +22,13 @@ export class NumberInputComponent implements OnInit, OnDestroy{
   currentValue: number = 0;
 
   ngOnInit(): void {
-    this.resetOnCartChange();
+    this.subscribeToCartChanges();
   }
 
   reset(): void {
     this.emitValue(-this.currentValue);
     this.currentValue = 0;
   }
-
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   const currentMaxValue = Number(this.maxValue());
-  //   if (changes['maxValue']) {
-  //     if (currentMaxValue !== null && this.currentValue > currentMaxValue) {
-  //       this.currentValue = currentMaxValue;
-  //       this.emitValue();
-  //     }
-  //   }
-  // }
 
   increment(): void {
     const currentMaxValue = Number(this.maxValue());
@@ -58,16 +49,19 @@ export class NumberInputComponent implements OnInit, OnDestroy{
     this.valueChange.emit(valueChange);
   }
 
-  //meterle id para pasarle el elemento a quitar num
-  resetOnCartChange(): void {
-    this.cartService.resetNumberInput$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: () => {
+  // //meterle id para pasarle el elemento a quitar num
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['cartService'] && changes['cartService'].currentValue === null) {
+      this.subscribeToCartChanges();
+    }
+  }
+
+  subscribeToCartChanges(): void {
+    this.cartService.resetNumberInputSession$.pipe(takeUntil(this.destroy$)).subscribe(el => {
+      if (el === this.elementToReset()) {
         this.decrement();
-      },
-      error: (error) => {
-        console.error('Error accessing cart items:', error);
       }
-    })
+    });
   }
 
   ngOnDestroy(): void {

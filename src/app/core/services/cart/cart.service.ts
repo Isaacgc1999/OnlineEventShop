@@ -22,8 +22,8 @@ export class CartService {
     return this.currentEventId.asObservable();
   }
 
-  private _resetNumberInput = new Subject<void>();
-  readonly resetNumberInput$ = this._resetNumberInput.asObservable();
+  private resetNumberInputSession = new Subject<string>();
+  readonly resetNumberInputSession$ = this.resetNumberInputSession.asObservable();
   
   constructor(){
     const storedCartEventItems = localStorage.getItem('cartByEventItems');
@@ -113,13 +113,14 @@ export class CartService {
   
         if (itemToRemove.ticketQuantity > 1) {
           eventCart.cart[itemIndexToRemove].ticketQuantity -= 1;
+          this.resetNumberInputSession.next(eventId);
         } else {
           eventCart.cart.splice(itemIndexToRemove, 1);
+          this.resetNumberInputSession.next(eventId);
           if (eventCart.cart.length === 0) {
             const newCartByEvent = currentCartByEvent.filter(item => item.eventId !== eventId);
             this.cartByEventItems.next(newCartByEvent);
             localStorage.setItem('cartByEventItems', JSON.stringify(newCartByEvent));
-            this.updateAvailability(sessionDate, +1); 
             return;
           }
         }
@@ -129,8 +130,6 @@ export class CartService {
   
         this.cartByEventItems.next(newCartByEvent);
         localStorage.setItem('cartByEventItems', JSON.stringify(newCartByEvent));
-        this._resetNumberInput.next();
-        // this.updateAvailability(sessionDate, +1); 
       } else {
         console.warn(`Session with date ${sessionDate} not found in the cart for event ${eventId}.`);
       }
