@@ -1,164 +1,197 @@
-# 🎟️ Event Booking App
+# 🎟️ Online Event Shop
 
-## Event Booking App
-
-Is a web application developed with **Angular 19** that allows users to view events and manage seat reservations through a shopping cart. It is fully responsive, modular, and built with a scalable architecture based on reactive programming.
+A concert ticket shop built with **Angular 19**. Browse events, pick tickets for each date and manage them in an order summary that remembers your cart between visits. The UI uses its own light-blue design system, inspired by Apple (iOS and macOS), Revolut and Trade Republic, and it switches to dark mode automatically.
 
 ---
 
 ## 🧰 Tech Stack
 
-| Technology         | Version / Usage                             |
-|--------------------|---------------------------------------------|
-| Angular            | 19                                          |
-| Angular Router     | Navigation between event list and event detail |
-| RxJS               | Reactive communication between services and components |
-| SASS (SCSS)        | Styles with BEM methodology                 |
-| Material Design    | Visual components                           |
-| Angular Signals    | `@input()` / `@output()` reactive signals   |
-| TypeScript         | Strict typing                               |
+| Technology       | Usage                                                                  |
+|------------------|------------------------------------------------------------------------|
+| Angular 19       | Standalone components, built-in control flow (`@if`, `@for`)           |
+| Angular Signals  | `input()`, `output()`, `computed()` and `toSignal()` with `OnPush`      |
+| RxJS             | HTTP calls and cart state (`BehaviorSubject`)                          |
+| Angular Router   | Navigation between the catalogue and the event page                    |
+| SCSS             | BEM naming and CSS custom properties (design tokens); no UI library    |
+| TypeScript       | Strict mode and strict templates                                       |
+| Karma + Jasmine  | Unit tests with code coverage                                          |
 
 ---
-## ⚽ Playground (run without installing or downloading anything)
+
+## ⚽ Playground (run without installing anything)
+
 https://stackblitz.com/~/github.com/Isaacgc1999/OnlineEventShop
 
 ## 📷 Screenshots
-![image](https://github.com/user-attachments/assets/0a449bca-310a-4a91-8f77-99258f9a0ed5)
-![image](https://github.com/user-attachments/assets/38ccaf7e-da91-43fa-9009-461dd055f7d4)
 
-## 🧱 Project Architecture
-```
-OnlineEventShop/
-├── .angular/
-├── .vscode/
-├── coverage/
-├── node_modules/
-├── public/
-│   └── ... # Static assets (fonts, etc. - based on your file explorer)
-├── src/
-│   ├── app/
-│   │   ├── core/
-│   │   │   ├── models/
-│   │   │   │   ├── cart.model.ts
-│   │   │   │   ├── event-info.model.ts
-│   │   │   │   └── event.model.ts
-│   │   │   ├── services/
-│   │   │   │   ├── cart/
-│   │   │   │   │   ├── cart.service.spec.ts
-│   │   │   │   │   └── cart.service.ts
-│   │   │   │   └── catalogue/
-│   │   │   │       ├── catalogue.service.spec.ts
-│   │   │   │       └── catalogue.service.ts
-│   │   │   └── ... # Other core files
-│   │   ├── features/
-│   │   │   ├── catalogue/
-│   │   │   │   ├── catalogue.component.html
-│   │   │   │   ├── catalogue.component.scss
-│   │   │   │   ├── catalogue.component.spec.ts
-│   │   │   │   └── catalogue.component.ts
-│   │   │   └── event-info/
-│   │   │       ├── card-info/
-│   │   │       │   ├── card-info.component.html
-│   │   │       │   ├── card-info.component.scss
-│   │   │       │   ├── card-info.component.spec.ts
-│   │   │       │   └── card-info.component.ts
-│   │   │       ├── event-info.component.html
-│   │   │       ├── event-info.component.scss
-│   │   │       ├── event-info.component.spec.ts
-│   │   │       └── event-info.component.ts
-│   │   ├── shared/
-│   │   │   ├── components/
-│   │   │   │   ├── button/
-│   │   │   │   │   ├── button.component.html
-│   │   │   │   │   ├── button.component.scss
-│   │   │   │   │   ├── button.component.spec.ts
-│   │   │   │   │   └── button.component.ts
-│   │   │   │   ├── card/
-│   │   │   │   │   ├── card.component.html
-│   │   │   │   │   ├── card.component.scss
-│   │   │   │   │   ├── card.component.spec.ts
-│   │   │   │   │   └── card.component.ts
-│   │   │   │   ├── cart/
-│   │   │   │   │   ├── cart.component.html
-│   │   │   │   │   ├── cart.component.scss
-│   │   │   │   │   ├── cart.component.spec.ts
-│   │   │   │   │   └── cart.component.ts
-│   │   │   │   └── number-input/
-│   │   │   │       ├── number-input.component.html
-│   │   │   │       ├── number-input.component.scss
-│   │   │   │       ├── number-input.component.spec.ts
-│   │   │   │       └── number-input.component.ts
-│   │   │   ├── header/
-│   │   │   │   ├── header.component.html
-│   │   │   │   ├── header.component.scss
-│   │   │   │   ├── header.component.spec.ts
-│   │   │   │   └── header.component.ts
-│   │   │   └── colors.scss
-│   │   ├── app.component.html
-│   │   ├── app.component.scss
-│   │   ├── app.component.spec.ts
-│   │   ├── app.component.ts
-│   │   ├── app.config.ts
-│   │   └── app.routes.ts
-... #Other configuration files
-```
+**Catalogue**
 
-## 🧑‍💻 Features
+![Catalogue on desktop](docs/screenshots/catalogue-desktop.png)
 
-### 🗂️ Event List (Catalogue)
+**Event page with tickets in the cart**
 
-- Displays a grid of events:
-  - 📱 1 column on small screens
-  - 💻 2 columns on medium/large screens
-- Event card:
-  - Title, subtitle, place, dates, description, image, and Buy button
-  - Link to event detail view
-- Sorted by end date (ascending order)
+![Event page on desktop](docs/screenshots/event-desktop.png)
 
-### 🎫 Event Detail
+**Phone, light and dark mode**
 
-- List of available sessions:
-  - One session per row
-  - Date, availability, and seat selection with `+` and `-` buttons
-  - Prevent overflow: does not allow selecting more seats than available
-  - Prevent underflow: does not allow negative values
-- Responsive design:
-  - 100% width on mobile
-  - 50% width on medium/large screens
-- Displays `"EVENT INFO NOT FOUND"` message if no data is available
-
-### 🛒 Shopping Cart
-
-- Reusable across the project
-- Grouped by event
-- Displays:
-  - Event title
-  - Sessions with selected seats and delete button (trash icon)
-- "Back" button to return to the event list
+<p>
+  <img src="docs/screenshots/event-mobile.png" alt="Event page on a phone with the floating cart bar" width="260" />
+  <img src="docs/screenshots/summary-mobile.png" alt="Order summary on a phone" width="260" />
+  <img src="docs/screenshots/catalogue-mobile-dark.png" alt="Catalogue on a phone in dark mode" width="260" />
+</p>
 
 ---
 
-## 🎨 Styles
+## 🧑‍💻 Features
 
-- **SASS + BEM** for maintaining scalable and modular styles
-- Centralized color palette in `colors.scss`:
+### 🗂️ Catalogue
+
+- Responsive grid: 1 column on phones, up to 3 on desktop
+- Each card is a single link to the event page and shows the image, date range, venue, title and subtitle
+- Events sorted by end date (ascending)
+- Loading skeletons, plus empty and error states
+
+### 🎫 Event page
+
+- Hero image, title, subtitle, venue, date range and description
+- One row per session: day and date, an availability label and a `−` / `+` stepper
+- Availability labels: `8 available`, `Only 2 left`, `Last ticket`, `Sold out`, `All in your cart`
+- The stepper shows the tickets already in the cart and can't go below 0 or above the session's availability
+- Shows "Dates aren't available" when an event has no session data (the mock API only includes events **68** and **184**)
+
+### 🛒 Order summary (cart)
+
+- Ticket-stub card with the total number of tickets, grouped by event
+- Remove a date with one tap, or clear the whole cart, with an **Undo** option for 6 seconds
+- Saved in `localStorage`, so the cart survives reloads and new visits
+- Desktop: stays in view beside the session list
+- Phones: a floating bar shows the ticket count and scrolls to the summary
+
+### 🧭 Header
+
+- Sticky, translucent bar with the logo and a Contact link
+- Cart button with a ticket-count badge that opens the last event in your cart
+
+---
+
+## 🎨 Design System
+
+All visual values live in [`src/styles/_tokens.scss`](src/styles/_tokens.scss) as CSS custom properties. Components only read these tokens, so dark mode is simply a second set of values for the same names (`prefers-color-scheme`).
+
+| Token          | Light      | Dark       | Used for                              |
+|----------------|------------|------------|---------------------------------------|
+| `--bg`         | `#F4F7FA`  | `#0A1119`  | Page background                       |
+| `--surface`    | `#FFFFFF`  | `#121C27`  | Cards, lists, order summary           |
+| `--tint`       | `#E3F0FB`  | `#16314D`  | Secondary buttons, stepper, badges    |
+| `--accent`     | `#1874C4`  | `#7CC0F2`  | Primary buttons (the only bright colour) |
+| `--text`       | `#0E1B2B`  | `#EAF2FA`  | Titles and body text                  |
+| `--text-2`     | `#536377`  | `#9AABBD`  | Subtitles and metadata                |
+
+- **Typography:** Manrope for titles and numbers, the system font for body text (SF Pro on Apple devices), and Material Symbols Rounded for icons
+- **Shape:** rounder corners on bigger objects (8 → 12 → 16 → 22 → 28 px) and pill-shaped buttons
+- **Accessibility:** touch-friendly controls (around 44 px), a visible focus ring, labelled stepper buttons, and no animation when the user prefers reduced motion
+
+Breakpoint mixins are in [`src/styles/_breakpoints.scss`](src/styles/_breakpoints.scss):
+
 ```scss
-// colors.scss
-$primary-color: #2a3f54;
-$accent-color: #e91e63;
-$background-color: #f5f5f5;
-$text-color: #333;
-$error-color: #ff5252;
+@use 'styles/breakpoints' as bp;
+
+.grid {
+  gap: 20px;
+
+  @include bp.up(bp.$md) {   // ≥ 900px
+    gap: 24px;
+  }
+}
 ```
+
+The shared button:
+
+```html
+<app-button variant="primary | tinted | plain" size="sm | md | lg" tone="danger" block loading>
+  Label
+</app-button>
+```
+
+---
+
+## 📱 Responsive Layout
+
+| Screen              | Gutters | Event page                                              |
+|---------------------|---------|---------------------------------------------------------|
+| Phone (< 600 px)    | 16 px   | Stacked; floating cart bar at the bottom                |
+| Tablet (600–899 px) | 24 px   | Stacked; floating cart bar at the bottom                |
+| Desktop (≥ 900 px)  | 40 px   | Sessions on the left, order summary pinned on the right |
+
+The catalogue fills the width with cards at least 280 px wide: 1 column on phones, 2 on tablets and 3 on wide screens. Content is capped at 1120 px wide.
+
+---
+
+## 🧱 Project Architecture
+
+```
+src/
+├── app/
+│   ├── core/
+│   │   ├── models/             # cart, event, event-info, session-row, catalogue-state
+│   │   └── services/
+│   │       ├── cart/           # cart state + localStorage
+│   │       └── catalogue/      # mock API (public/mocks)
+│   ├── features/
+│   │   ├── catalogue/          # event list page
+│   │   └── event-info/         # event page
+│   │       └── card-info/      # session list with steppers
+│   ├── shared/
+│   │   ├── components/
+│   │   │   ├── button/         # app-button (variants, sizes, loading)
+│   │   │   ├── card/           # event card
+│   │   │   ├── cart/           # order summary + floating phone bar
+│   │   │   └── number-input/   # ticket stepper
+│   │   ├── header/
+│   │   └── models/             # button types
+│   ├── app.config.ts
+│   └── app.routes.ts
+├── styles/
+│   ├── _tokens.scss            # design tokens + dark mode
+│   └── _breakpoints.scss       # up() / down() media query mixins
+├── styles.scss                 # global base styles
+└── index.html
+public/
+├── images/                     # event image
+└── mocks/                      # events.json, event-info-68.json, event-info-184.json
+```
+
+Each component folder contains its `.ts`, `.html`, `.scss` and `.spec.ts` files. Types and interfaces live only in `models/` folders, never inside components.
+
+---
+
 ## 🧪 Testing
 
-- Unit tests with Karma and Jasmine
-- Coverage:
-  - Services (`CartService`, `CatalogueService`)
-  - Components (`CartComponent`, `NumberInputComponent`, `EventInfoComponent`, etc.)
-  - `@Input()` / `@Output()` communication with component mocks (`host components`)
- 
-    ![image](https://github.com/user-attachments/assets/41836d28-1d8d-468d-82a7-ef6002ac1614)
+**55 tests** across 11 spec files, all passing.
+
+| Coverage   | Result                 |
+|------------|------------------------|
+| Statements | **90.86 %** (199 / 219) |
+| Branches   | **70.83 %** (34 / 48)   |
+| Functions  | **91.30 %** (63 / 69)   |
+| Lines      | **91.50 %** (183 / 200) |
+
+What the tests cover:
+- `CartService`: add, update, remove a session, clear and restore (Undo), `localStorage` persistence
+- `CatalogueService` and the catalogue page: sorting, rendering and the error state
+- Session list: availability labels, and tickets already in the cart
+- Stepper: bounds, disabled states and accessible labels
+- Order summary: totals, removing a session, empty state, clear and Undo
+- Button: projected content, default `type="button"`, disabled and loading states, variants
+- Inputs and outputs, tested through host components
+
+To regenerate the coverage report:
+
+```bash
+npx ng test --watch=false --code-coverage
+```
+
+The HTML report is written to `coverage/`.
 
 ---
 
@@ -168,43 +201,15 @@ $error-color: #ff5252;
    ```bash
    npm install
    ```
-2. Run in development mode:
-     ```bash
-   ng serve
-   ```
-4. Run tests:
+2. Start the dev server (http://localhost:4200):
    ```bash
-   ng test
+   npm start
    ```
-
-## 📱 Responsive Layout
-
-The project uses a responsive design approach to ensure the application is optimized for all screen sizes:
-
-### **Event List (Catalogue)**:
-- **Small screens**: Single column layout for event cards.
-- **Medium/Large screens**: Two-column grid layout for event cards.
-  
-The event cards adapt to different screen sizes and adjust their layout accordingly, making use of `flexbox` and CSS media queries for dynamic responsiveness.
-
-### **Event Card Content**:
-- **Small screens**: Display event title, subtitle, place, and dates.
-- **Medium/Large screens**: In addition to the previous content, show a short description.
-- Each card is designed to link to the event detail page, providing a smooth and intuitive user experience.
-
-### **Event Detail View**:
-- **Sessions list**: Each session is shown as a single row, optimized for both small and large screens.
-  - On **small screens**: The sessions list will span 100% of the screen width.
-  - On **medium/large screens**: The sessions list will occupy 50% of the screen width to allow a two-column view.
-  
-- **Cart Section**: The shopping cart is designed to fit within a responsive grid, ensuring it is user-friendly across devices.
-
----
-
-### Media Queries Implementation:
-The layout automatically adjusts based on the screen size. It uses a combination of:
-- **CSS Grid and Flexbox**: For organizing event cards and sessions
-- **Media Queries**: To handle changes for small, medium, and large screen sizes
-
-
-
+3. Run the tests:
+   ```bash
+   npm test
+   ```
+4. Build for production:
+   ```bash
+   npm run build
+   ```
