@@ -1,23 +1,16 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { ButtonComponent } from "../button/button.component";
-import { DatePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { DatePipe, TitleCasePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { Event } from '../../../core/models/event.model';
 
 @Component({
   selector: 'app-card',
   standalone: true,
-  imports: [MatCardModule, ButtonComponent, DatePipe],
+  imports: [DatePipe, TitleCasePipe, RouterLink],
   templateUrl: './card.component.html',
   styleUrl: './card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardComponent {
-
-  readonly event = input<Event>();
-  readonly click = output<void>();
-
-  onClick(){
-    this.click.emit();
-  }
+  readonly event = input.required<Event>();
 }

@@ -1,17 +1,41 @@
-<div class="catalogue-container">
-    @defer(on viewport){
-        @for(event of events; track event.id)
-        {
-            <app-card class="catalogue-container__card" 
-                [event]="event"
-                (click)="onCardClick(event.id)">
-            </app-card>
+<main class="container catalogue">
+    <header class="catalogue__header">
+        <h1>Events</h1>
+        @if (state().status === 'ready') {
+            <p>{{ state().events.length }} {{ state().events.length === 1 ? 'event' : 'events' }}</p>
         }
+    </header>
+
+    @if (state().status === 'loading') {
+        <div class="catalogue__grid" aria-busy="true" aria-label="Loading events">
+            @for (card of skeletonCards; track card) {
+                <div class="skeleton-card">
+                    <span class="skeleton skeleton-card__media"></span>
+                    <div class="skeleton-card__body">
+                        <span class="skeleton skeleton-card__line skeleton-card__line--short"></span>
+                        <span class="skeleton skeleton-card__line skeleton-card__line--title"></span>
+                        <span class="skeleton skeleton-card__line"></span>
+                    </div>
+                </div>
+            }
+        </div>
+    } @else if (state().status === 'error') {
+        <div class="catalogue__state">
+            <span class="catalogue__state-icon material-symbols-rounded" aria-hidden="true">confirmation_number</span>
+            <h2>Couldn't load events</h2>
+            <p>Check your connection, then refresh the page to try again.</p>
+        </div>
+    } @else if (state().events.length === 0) {
+        <div class="catalogue__state">
+            <span class="catalogue__state-icon material-symbols-rounded" aria-hidden="true">confirmation_number</span>
+            <h2>No events yet</h2>
+            <p>New events will show up here as soon as they go on sale.</p>
+        </div>
+    } @else {
+        <div class="catalogue__grid">
+            @for (event of state().events; track event.id) {
+                <app-card [event]="event"></app-card>
+            }
+        </div>
     }
-    @placeholder {
-        <p>Loading events...</p>
-    }
-    @error {
-    <p class="error-message">There was an error trying to load the data.</p>
-    }
-</div>
+</main>

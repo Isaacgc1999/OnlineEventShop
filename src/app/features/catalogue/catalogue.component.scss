@@ -1,21 +1,87 @@
-.catalogue-container {
-    display: grid;
-    gap: 1.5rem;
-    padding: 2rem 15rem 2rem 15rem;
-    grid-template-columns: repeat(2, 1fr);
+@use 'styles/breakpoints' as bp;
 
-    @media (min-width: 769px) and (max-width: 1000px) {
-        gap: 1rem;
-        padding: 2rem 5rem 2rem 5rem;
-    }
-    @media (min-width: 1001px) and (max-width: 1200px) {
-        gap: 1rem;
-        padding: 2rem 7rem 2rem 7rem;
-    }
+.catalogue {
+    padding-block: 32px 64px;
 
-    @media (max-width: 768px) {
+    &__header {
         display: flex;
-        flex-direction: column;
-        padding: 2rem 4rem 2rem 4rem;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 24px;
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-weight: 800;
+            letter-spacing: -0.035em;
+        }
+
+        p {
+            font-size: 0.9375rem;
+            color: var(--text-2);
+        }
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+        gap: 20px;
+
+        @include bp.up(bp.$md) {
+            gap: 24px;
+        }
+    }
+
+    &__state {
+        display: grid;
+        justify-items: center;
+        gap: 8px;
+        padding: 64px 16px;
+        text-align: center;
+        color: var(--text-2);
+
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+    }
+
+    &__state-icon {
+        display: grid;
+        place-items: center;
+        width: 56px;
+        height: 56px;
+        margin-bottom: 8px;
+        border-radius: 50%;
+        background: var(--tint);
+        color: var(--accent-text);
+        font-size: 28px;
+    }
+}
+
+.skeleton-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0 0 1px var(--hairline);
+    overflow: hidden;
+
+    &__media {
+        aspect-ratio: 16 / 10;
+        border-radius: 0;
+    }
+
+    &__body {
+        display: grid;
+        gap: 10px;
+        padding: 16px 18px 22px;
+    }
+
+    &__line {
+        width: 50%;
+        height: 14px;
+
+        &--short { width: 60%; height: 12px; }
+        &--title { width: 80%; height: 20px; }
     }
 }
