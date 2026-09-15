@@ -1,11 +1,49 @@
-<div class="info-container">
-    <div class="info-container__return">
-        <app-button class="info-container__return__button" [text]="'Back'" [routerLink]="'/'"></app-button>
-    </div>
-    <div class="info-container__event">
-        <div class="info-container__event__elements">
-            <app-card-info class="info" [eventId]="eventId"></app-card-info>
-            <app-cart class="cart"></app-cart>
+<main class="container event-page">
+    <a class="back-link" routerLink="/">
+        <span class="material-symbols-rounded" aria-hidden="true">chevron_left</span>
+        Events
+    </a>
+
+    <div class="event-page__layout">
+        <div class="event-page__main">
+            <div class="event-hero">
+                <img src="/images/sample-image.jpg" alt="" />
+            </div>
+
+            @if (event(); as details) {
+                <header class="event-page__header">
+                    <div>
+                        <h1>{{ details.title | titlecase }}</h1>
+                        <p class="event-page__subtitle">{{ details.subtitle }}</p>
+                    </div>
+                    <ul class="event-page__meta">
+                        <li>
+                            <span class="material-symbols-rounded" aria-hidden="true">location_on</span>
+                            {{ details.place }}
+                        </li>
+                        <li>
+                            <span class="material-symbols-rounded" aria-hidden="true">calendar_today</span>
+                            {{ details.startDate | date:'d MMM' }} – {{ details.endDate | date:'d MMM y' }}
+                        </li>
+                    </ul>
+                </header>
+                @if (details.description) {
+                    <p class="event-page__description" [innerHTML]="details.description"></p>
+                }
+            } @else {
+                <div class="event-page__header" aria-busy="true" aria-label="Loading event">
+                    <div class="event-page__header-skeleton">
+                        <span class="skeleton"></span>
+                        <span class="skeleton"></span>
+                    </div>
+                </div>
+            }
+
+            <app-card-info [eventId]="eventId"></app-card-info>
         </div>
+
+        <aside class="event-page__aside" aria-label="Order summary">
+            <app-cart></app-cart>
+        </aside>
     </div>
-</div>
+</main>

@@ -1,1 +1,11 @@
-<button class="custom-button" [disabled]="isDisabled()" type="button" (click)="click()">{{ text() }}</button>
+<button
+    [type]="type()"
+    [class]="['btn', 'btn--' + variant(), 'btn--' + size(), 'btn--' + tone()]"
+    [class.btn--block]="block()"
+    [disabled]="disabled() || loading()"
+    [attr.aria-busy]="loading()">
+    @if (loading()) {
+        <span class="spinner" aria-hidden="true"></span>
+    }
+    <ng-content></ng-content>
+</button>

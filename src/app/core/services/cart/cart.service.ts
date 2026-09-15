@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, take } from 'rxjs';
+import { BehaviorSubject, Observable, take } from 'rxjs';
 import { CartItem, EventCart } from '../../models/cart.model';
 import { EventInfo, Session } from '../../models/event-info.model';
+
+const STORAGE_KEY = 'cartByEventItems';
 
 @Injectable({
   providedIn: 'root'
@@ -22,11 +24,8 @@ export class CartService {
     return this.currentEventId.asObservable();
   }
 
-  private resetNumberInputSession = new Subject<string>();
-  readonly resetNumberInputSession$ = this.resetNumberInputSession.asObservable();
-  
   constructor(){
-    const storedCartEventItems = localStorage.getItem('cartByEventItems');
+    const storedCartEventItems = localStorage.getItem(STORAGE_KEY);
     try {
       const parsedCart = JSON.parse(storedCartEventItems || '[]');
       if (Array.isArray(parsedCart)) {
@@ -34,144 +33,91 @@ export class CartService {
       } else {
         console.warn('Invalid cartItems in localStorage, resetting...');
         this.cartByEventItems.next([]);
-        localStorage.removeItem('cartByEventItems');
+        localStorage.removeItem(STORAGE_KEY);
       }
     } catch (e) {
       console.error('Error parsing cartItems from localStorage:', e);
       this.cartByEventItems.next([]);
-      localStorage.removeItem('cartByEventItems');
+      localStorage.removeItem(STORAGE_KEY);
     }
   }
 
   setCurrentEventId(eventId: string | null): void {
     this.currentEventId.next(eventId);
   }
-  
+
   setEventInfo(eventInfo: EventInfo): void {
     this.eventInfo.next(eventInfo);
   }
+
   addEventToCart(sessionDate: string, quantityTickets: number): void {
     this.currentEventId.pipe(take(1)).subscribe(eventId => {
       if (!eventId) {
         console.error('No ID was selected.');
         return;
       }
-  
+
       const currentCartByEvent = this.cartByEventItems.getValue();
       const eventInCartIndex = currentCartByEvent.findIndex(item => item.eventId === eventId);
       let eventCart: CartItem[] = [];
-  
+
       if (eventInCartIndex !== -1) {
         eventCart = [...currentCartByEvent[eventInCartIndex].cart];
       }
-  
+
       const eventDetails = this.eventInfo.getValue();
       const sessionToAdd = eventDetails?.sessions.find((s: Session) => s.date === sessionDate);
-  
+
       if (!sessionToAdd) {
         console.warn(`No session was found with that date: ${sessionDate}`);
         return;
       }
-  
+
       const existingItemIndex = eventCart.findIndex(item => item.session.date === sessionDate);
-  
+
       if (existingItemIndex !== -1) {
         const existingItem = eventCart[existingItemIndex];
         existingItem.ticketQuantity = quantityTickets;
-  
+
       if (existingItem.ticketQuantity <= 0) {
         eventCart.splice(existingItemIndex, 1);
       }
       } else if (quantityTickets > 0) {
         eventCart.push({ session: sessionToAdd, ticketQuantity: quantityTickets });
       }
-  
+
       const updatedEventCart: EventCart = { eventId: eventId, eventTitle: eventDetails?.event.title ?? '', cart: eventCart };
       const newCartByEvent = [...currentCartByEvent];
-  
+
       if (eventInCartIndex !== -1) {
         newCartByEvent[eventInCartIndex] = updatedEventCart;
       } else {
         newCartByEvent.push(updatedEventCart);
       }
-  
-      this.cartByEventItems.next(newCartByEvent);
-      localStorage.setItem('cartByEventItems', JSON.stringify(newCartByEvent));
+
+      this.save(newCartByEvent);
     });
   }
 
-  removeItemFromCart(eventId: string, sessionDate: string): void {
-    const currentCartByEvent = this.cartByEventItems.getValue();
-    const eventInCartIndex = currentCartByEvent.findIndex(item => item.eventId === eventId);
-  
-    if (eventInCartIndex !== -1) {
-      const eventCart = { ...currentCartByEvent[eventInCartIndex] };
-      const itemIndexToRemove = eventCart.cart.findIndex(item => item.session.date === sessionDate);
-  
-      if (itemIndexToRemove !== -1) {
-        const itemToRemove = eventCart.cart[itemIndexToRemove];
-  
-        if (itemToRemove.ticketQuantity > 1) {
-          eventCart.cart[itemIndexToRemove].ticketQuantity -= 1;
-          this.resetNumberInputSession.next(eventId);
-        } else {
-          eventCart.cart.splice(itemIndexToRemove, 1);
-          this.resetNumberInputSession.next(eventId);
-          if (eventCart.cart.length === 0) {
-            const newCartByEvent = currentCartByEvent.filter(item => item.eventId !== eventId);
-            this.cartByEventItems.next(newCartByEvent);
-            localStorage.setItem('cartByEventItems', JSON.stringify(newCartByEvent));
-            return;
-          }
-        }
-  
-        const newCartByEvent = [...currentCartByEvent];
-        newCartByEvent[eventInCartIndex] = eventCart;
-  
-        this.cartByEventItems.next(newCartByEvent);
-        localStorage.setItem('cartByEventItems', JSON.stringify(newCartByEvent));
-      } else {
-        console.warn(`Session with date ${sessionDate} not found in the cart for event ${eventId}.`);
-      }
-    } else {
-      console.warn(`Cart for event ${eventId} not found.`);
-    }
+  /** Removes every ticket for one session, and the event itself once it has no sessions left. */
+  removeSession(eventId: string, sessionDate: string): void {
+    const newCartByEvent = this.cartByEventItems.getValue()
+      .map(eventCart => eventCart.eventId === eventId
+        ? { ...eventCart, cart: eventCart.cart.filter(item => item.session.date !== sessionDate) }
+        : eventCart)
+      .filter(eventCart => eventCart.cart.length > 0);
+
+    this.save(newCartByEvent);
   }
 
   clearCart(): void {
-    const currentCartByEvent = this.cartByEventItems.getValue();
-
-    currentCartByEvent.forEach(eventCart => {
-      eventCart.cart.forEach(item => {
-        this.updateAvailability(item.session.date, item.ticketQuantity, eventCart.eventId);
-      });
-    });
-  
     this.cartByEventItems.next([]);
-    localStorage.removeItem('cartByEventItems');
+    localStorage.removeItem(STORAGE_KEY);
   }
 
-  private updateAvailability(sessionDate: string, quantityChange: number, eventId?: string): void {
-    const currentEventInfo = this.eventInfo.getValue();
-    if (currentEventInfo && currentEventInfo.sessions) {
-      const sessionToUpdate = currentEventInfo.sessions.find(s => s.date === sessionDate);
-  
-      if (sessionToUpdate) {
-        const currentCartForEvent = this.cartByEventItems.getValue().find(ec => ec.eventId === eventId);
-        let ticketsCurrentlyInCartForSession = 0;
-  
-        if (currentCartForEvent && currentCartForEvent.cart) {
-          const cartItem = currentCartForEvent.cart.find(item => item.session.date === sessionDate);
-          if (cartItem) {
-            ticketsCurrentlyInCartForSession = cartItem.ticketQuantity;
-          }
-        }
-  
-        const newAvailability = Number(sessionToUpdate.availability) + quantityChange;
-        sessionToUpdate.availability = Math.max(0, newAvailability).toString();
-        this.eventInfo.next({ ...currentEventInfo });
-      }
-    }
+  /** Puts back a cart saved before clearing it (used by the Undo toast). */
+  restoreCart(cartByEvent: EventCart[]): void {
+    this.save(cartByEvent);
   }
 
   getTotalTickets(): number {
@@ -186,11 +132,16 @@ export class CartService {
     currentCart.forEach(eventCart => {
       if (eventCart.cart && Array.isArray(eventCart.cart)) {
           eventCart.cart.forEach(item => {
-            totalTickets += item.ticketQuantity; 
+            totalTickets += item.ticketQuantity;
           });
       }
     });
-  
+
     return totalTickets;
+  }
+
+  private save(cartByEvent: EventCart[]): void {
+    this.cartByEventItems.next(cartByEvent);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cartByEvent));
   }
 }

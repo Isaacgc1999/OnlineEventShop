@@ -11,6 +11,11 @@ describe('CartService', () => {
     availability: '10',
   };
 
+  const mockSecondSession: Session = {
+    date: '2025-04-27',
+    availability: '5',
+  };
+
   const mockEventInfo: EventInfo = {
     event: { id: '1',
       title: 'Test Event',
@@ -20,7 +25,7 @@ describe('CartService', () => {
       endDate: 'endDate',
       place: 'Test Place',
       image: ''},
-    sessions: [mockSession],
+    sessions: [mockSession, mockSecondSession],
   };
   beforeEach(() => {
     localStorage.clear();
@@ -79,28 +84,32 @@ describe('CartService', () => {
     });
   });
 
-  it('should remove one ticket from a session in cart', (done) => {
+  it('should remove every ticket for a session but keep the other sessions', (done) => {
     service.setCurrentEventId('1');
     service.setEventInfo(mockEventInfo);
     service.addEventToCart(mockSession.date, 3);
+    service.addEventToCart(mockSecondSession.date, 1);
 
-    service.removeItemFromCart('1', mockSession.date);
+    service.removeSession('1', mockSession.date);
 
     service.cartByEventItems$.subscribe(cart => {
-      expect(cart[0].cart[0].ticketQuantity).toBe(2);
+      expect(cart.length).toBe(1);
+      expect(cart[0].cart.length).toBe(1);
+      expect(cart[0].cart[0].session.date).toBe(mockSecondSession.date);
       done();
     });
   });
 
-  it('should remove session if ticketQuantity becomes 0', (done) => {
+  it('should drop the event once its last session is removed', (done) => {
     service.setCurrentEventId('1');
     service.setEventInfo(mockEventInfo);
-    service.addEventToCart(mockSession.date, 1);
+    service.addEventToCart(mockSession.date, 2);
 
-    service.removeItemFromCart('1', mockSession.date);
+    service.removeSession('1', mockSession.date);
 
     service.cartByEventItems$.subscribe(cart => {
       expect(cart.length).toBe(0);
+      expect(JSON.parse(localStorage.getItem('cartByEventItems') ?? 'null')).toEqual([]);
       done();
     });
   });
@@ -113,9 +122,7 @@ describe('CartService', () => {
     expect(service.getTotalTickets()).toBe(3);
   });
 
-  it('should clear cart and update availability', () => {
-    const spy = spyOn<any>(service, 'updateAvailability').and.callThrough();
-
+  it('should clear the cart without changing session availability', () => {
     service.setCurrentEventId('1');
     service.setEventInfo(mockEventInfo);
     service.addEventToCart(mockSession.date, 2);
@@ -123,6 +130,21 @@ describe('CartService', () => {
     service.clearCart();
 
     expect(service.getTotalTickets()).toBe(0);
-    expect(spy).toHaveBeenCalledWith(mockSession.date, 2, '1');
+    expect(mockSession.availability).toBe('10');
+    expect(localStorage.getItem('cartByEventItems')).toBeNull();
+  });
+
+  it('should restore a cart saved before clearing', () => {
+    service.setCurrentEventId('1');
+    service.setEventInfo(mockEventInfo);
+    service.addEventToCart(mockSession.date, 2);
+    let snapshot: any[] = [];
+    service.cartByEventItems$.subscribe(cart => snapshot = cart).unsubscribe();
+
+    service.clearCart();
+    service.restoreCart(snapshot);
+
+    expect(service.getTotalTickets()).toBe(2);
+    expect(localStorage.getItem('cartByEventItems')).not.toBeNull();
   });
 });
