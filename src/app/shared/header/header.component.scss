@@ -1,59 +1,107 @@
-@use "../../../colors.scss" as *;
+:host {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: block;
+}
 
-.app-header{
-    display: flex;
-    background-color: $dark;
-    padding: 15px 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+// Translucent bar that blurs whatever scrolls under it
+.app-header {
+    padding-top: env(safe-area-inset-top, 0px);
+    background: var(--material);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--hairline);
 
-    &__container{
+    &__bar {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 20px;
-        width: 100%;
+        gap: 16px;
+        height: var(--header-height);
+    }
 
-        &__logo{
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-    
-            &__title{
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                font-family: 'Celsius Flower', sans-serif;
-                color: $light;
-            }
-            
-            a{
-                font-size: 2rem;
-                color: $light;
-                text-decoration: none;
+    &__actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
 
-                transition: color 0.2s ease-in-out;
+    &__link {
+        display: inline-flex;
+        align-items: center;
+        height: 32px;
+        padding: 0 12px;
+        border-radius: var(--radius-pill);
+        color: var(--accent-text);
+        font: 600 0.8125rem/1 var(--font-text);
+        text-decoration: none;
+        transition: background-color var(--duration-base) var(--ease-out);
 
-                &:hover{
-                    color: $secondary;
-                }
-            }
+        &:hover {
+            background: var(--fill);
         }
-        &__nav-links{
-            display: flex;
-            gap: 20px;
-            font-family: 'Celsius Flower', sans-serif;
-            color: $light;
+    }
+}
 
-            a{
-                font-size: 1rem;
-                color: $light;
-                text-decoration: none;
-                transition: color 0.2s ease-in-out;
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: var(--radius-xs);
+    color: var(--text);
+    font: 800 1.0625rem/1 var(--font-display);
+    letter-spacing: -0.02em;
+    text-decoration: none;
 
-                &:hover{
-                    color: $secondary;
-                }
-            }
+    &__mark {
+        display: grid;
+        place-items: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 9px;
+        background: linear-gradient(145deg, var(--sky-300), var(--sky-600));
+        color: #FFFFFF;
+
+        .material-symbols-rounded {
+            font-size: 18px;
         }
+    }
+}
+
+.cart-link {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--tint);
+    color: var(--accent-text);
+    text-decoration: none;
+    transition: background-color var(--duration-base) var(--ease-out);
+
+    .material-symbols-rounded {
+        font-size: 22px;
+    }
+
+    &:hover {
+        background: var(--tint-strong);
+    }
+
+    &__badge {
+        position: absolute;
+        top: -3px;
+        right: -3px;
+        min-width: 19px;
+        height: 19px;
+        padding: 0 5px;
+        border-radius: 10px;
+        background: var(--accent);
+        color: var(--on-accent);
+        font: 700 0.6875rem/19px var(--font-text);
+        text-align: center;
+        font-variant-numeric: tabular-nums;
+        box-shadow: 0 0 0 2px var(--bg);
     }
 }
