@@ -1,5 +1,15 @@
-<div class="number-input">
-    <button class="number-input__left" (click)="decrement()">-</button>
-    <span class="number-input__center">{{ currentValue }}</span>
-    <button class="number-input__right" (click)="increment()">+</button>
+<div class="stepper" role="group" [attr.aria-label]="'Tickets' + labelSuffix()">
+    <button type="button" class="stepper__btn"
+        [disabled]="!canDecrement()"
+        [attr.aria-label]="'Remove a ticket' + labelSuffix()"
+        (click)="decrement()">
+        <span class="material-symbols-rounded" aria-hidden="true">remove</span>
+    </button>
+    <output class="stepper__value" aria-live="polite">{{ value() }}</output>
+    <button type="button" class="stepper__btn"
+        [disabled]="!canIncrement()"
+        [attr.aria-label]="'Add a ticket' + labelSuffix()"
+        (click)="increment()">
+        <span class="material-symbols-rounded" aria-hidden="true">add</span>
+    </button>
 </div>

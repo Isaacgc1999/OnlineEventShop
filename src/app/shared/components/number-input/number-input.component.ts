@@ -1,7 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, OnChanges, OnDestroy, OnInit, output, SimpleChanges } from '@angular/core';
-import { CartService } from '../../../core/services/cart/cart.service';
-import { EventCart } from '../../../core/models/cart.model';
-import { Subject, takeUntil } from 'rxjs';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-number-input',
@@ -11,61 +8,30 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrl: './number-input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NumberInputComponent implements OnInit, OnDestroy{
-  private cartService = inject(CartService);
-  readonly maxValue = input<string|null>(null);
-  readonly elementToReset = input<string>('');
+export class NumberInputComponent {
+  readonly value = input.required<number>();
+  readonly min = input(0);
+  readonly max = input<number | null>(null);
+  /** What the count refers to, e.g. "Thursday, 1 October". Used in the button labels. */
+  readonly label = input('');
   readonly valueChange = output<number>();
 
-  private readonly destroy$ = new Subject<void>();
-  
-
-  currentValue: number = 0;
-
-  ngOnInit(): void {
-    this.subscribeToCartChanges();
-  }
-
-  reset(): void {
-    this.emitValue(-this.currentValue);
-    this.currentValue = 0;
-  }
+  readonly canDecrement = computed(() => this.value() > this.min());
+  readonly canIncrement = computed(() => {
+    const max = this.max();
+    return max === null || this.value() < max;
+  });
+  readonly labelSuffix = computed(() => (this.label() ? ` for ${this.label()}` : ''));
 
   increment(): void {
-    const currentMaxValue = Number(this.maxValue());
-    if (currentMaxValue === null || this.currentValue < currentMaxValue) {
-      this.currentValue++;
-      this.emitValue(1);
+    if (this.canIncrement()) {
+      this.valueChange.emit(this.value() + 1);
     }
   }
 
   decrement(): void {
-    if (this.currentValue > 0) {
-      this.currentValue--;
-      this.emitValue(-1);
+    if (this.canDecrement()) {
+      this.valueChange.emit(this.value() - 1);
     }
-  }
-
-  private emitValue(valueChange: number): void {
-    this.valueChange.emit(valueChange);
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['cartService'] && changes['cartService'].currentValue === null) {
-      this.subscribeToCartChanges();
-    }
-  }
-
-  subscribeToCartChanges(): void {
-    this.cartService.resetNumberInputSession$.pipe(takeUntil(this.destroy$)).subscribe(el => {
-      if (el === this.elementToReset()) {
-        this.decrement();
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }
