@@ -172,7 +172,7 @@ Each component folder contains its `.ts`, `.html`, `.scss` and `.spec.ts` files.
 | Coverage   | Result                 |
 |------------|------------------------|
 | Statements | **90.86 %** (199 / 219) |
-| Branches   | **70.83 %** (34 / 48)   |
+| Branches   | **91.66 %** (44 / 48)   |
 | Functions  | **91.30 %** (63 / 69)   |
 | Lines      | **91.50 %** (183 / 200) |
 
