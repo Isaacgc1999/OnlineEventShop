@@ -1,29 +1,62 @@
-<div class="cart">
-    <mat-card class="cart__container">
-        <h2>Shopping Cart</h2>
-        <!-- poner evento nombre -->
-        @if(cartItemsByEvent.length === 0) {
-            <p>No tickets selected in the cart.</p>
-        }
-        <ul>
-            @if(cartItemsByEvent){
-                @for(item of cartItemsByEvent; track item.eventId) {
-                    @if(item.cart.length > 0) {
-                        <li class="cart__container__event">
-                            <h4>{{item.eventTitle}}</h4>
-                        </li>
-                    }
-                    @for(cart of item.cart; track cart){
-                        <li>{{ cart.session.date | date:'dd/MM/yyyy' }} - {{ cart.ticketQuantity }} ticket(s)
-                            <button mat-icon-button (click)="removeEvent(item.eventId, cart.session.date)" class="delete-button">
-                                <img src="/images/trash.png" alt="Delete" width="20" height="20" />
+<section class="summary" #summary aria-labelledby="summary-title">
+    @if (totalTickets() === 0) {
+        <div class="summary__empty">
+            <span class="summary__empty-icon material-symbols-rounded" aria-hidden="true">confirmation_number</span>
+            <h2 id="summary-title">No tickets yet</h2>
+            <p>Pick a date to add tickets.</p>
+        </div>
+    } @else {
+        <div class="summary__head">
+            <h2 id="summary-title" class="summary__label">Your tickets</h2>
+            <p class="summary__count">
+                <span class="summary__number">{{ totalTickets() }}</span>
+                {{ totalTickets() === 1 ? 'ticket' : 'tickets' }}
+            </p>
+        </div>
+        <div class="summary__perforation" aria-hidden="true"></div>
+        @for (eventCart of cartItemsByEvent(); track eventCart.eventId) {
+            <div class="summary__event">
+                <h3>{{ eventCart.eventTitle | titlecase }}</h3>
+                <ul>
+                    @for (item of eventCart.cart; track item.session.date) {
+                        <li class="summary__line">
+                            <span>{{ item.session.date | date:'EEE d MMM' }}</span>
+                            <span class="summary__qty">×{{ item.ticketQuantity }}</span>
+                            <button type="button" class="summary__remove"
+                                [attr.aria-label]="'Remove ' + (item.session.date | date:'EEEE d MMMM')"
+                                (click)="removeSession(eventCart.eventId, item.session.date)">
+                                <span class="material-symbols-rounded" aria-hidden="true">close</span>
                             </button>
                         </li>
                     }
+                </ul>
+            </div>
+        }
+        <div class="summary__actions">
+            <app-button variant="plain" tone="danger" block (click)="clearCart()">Clear cart</app-button>
+        </div>
+    }
+</section>
+
+@if (totalTickets() > 0) {
+    <div class="cart-bar">
+        <div>
+            <span class="cart-bar__count">{{ totalTickets() }} {{ totalTickets() === 1 ? 'ticket' : 'tickets' }}</span>
+            <span class="cart-bar__sub">
+                @if (cartItemsByEvent().length === 1) {
+                    {{ cartItemsByEvent()[0].eventTitle | titlecase }}
+                } @else {
+                    {{ cartItemsByEvent().length }} events
                 }
-            }
-            </ul>
-            <p>Total Tickets: {{ totalTickets() }}</p>
-            <app-button class="info-container__return__button" [text]="'Clear Cart'" (onClick)="clearCart()"></app-button>
-    </mat-card>
-</div>
+            </span>
+        </div>
+        <app-button (click)="reviewCart()">Review</app-button>
+    </div>
+}
+
+@if (clearedCart()) {
+    <div class="toast" role="status">
+        <span>Cart cleared</span>
+        <button type="button" (click)="undoClear()">Undo</button>
+    </div>
+}

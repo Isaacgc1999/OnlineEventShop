@@ -1,16 +1,18 @@
-<mat-card  class="custom-card" appearance="outlined">
-    <mat-card-header class="custom-card__header">
-        <mat-card-title class="custom-card__header__title" (click)="onClick()">{{event()?.title}}</mat-card-title>
-        <div class="custom-card__header__subtitle">
-            <mat-card-subtitle class="text" (click)="onClick()">{{event()?.subtitle}}</mat-card-subtitle>
+<a class="event-card" [routerLink]="['/event', event().id]">
+    <div class="event-card__media">
+        <img src="/images/sample-image.jpg" alt="" loading="lazy" />
+        <span class="event-card__dates">{{ event().startDate | date:'d MMM' }} – {{ event().endDate | date:'d MMM' }}</span>
+    </div>
+    <div class="event-card__body">
+        <span class="event-card__venue">
+            <span class="material-symbols-rounded" aria-hidden="true">location_on</span>
+            {{ event().place }}
+        </span>
+        <h2 class="event-card__title">{{ event().title | titlecase }}</h2>
+        <p class="event-card__subtitle">{{ event().subtitle }}</p>
+        <div class="event-card__footer">
+            <span>View dates</span>
+            <span class="event-card__go material-symbols-rounded" aria-hidden="true">chevron_right</span>
         </div>
-        <img mat-card-image src="/images/sample-image.jpg" alt="Event Image" class="custom-card__content__image" (click)="onClick()"/>
-    </mat-card-header>
-    <mat-card-content class="custom-card__content">
-        <p class="custom-card__content__dates">{{event()?.startDate | date:'dd/MM/yyyy'}} - {{event()?.endDate | date:'dd/MM/yyyy'}}</p>
-        <p class="custom-card__content__description" [innerHTML]="event()?.description"></p>
-    </mat-card-content>
-    <mat-card-actions>
-        <app-button class="custom-card__button" [text]="'Buy'" (click)="onClick()"></app-button>
-    </mat-card-actions>
-</mat-card>
+    </div>
+</a>

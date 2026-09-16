@@ -1,25 +1,82 @@
-/* You can add global styles to this file, and also import other style files */
-@use 'colors' as *;
+@use 'styles/tokens';
 
-@font-face {
-    font-family: 'Celsius Flower';
-    src: url('/fonts/Celsius Flower.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
+*, *::before, *::after {
+    box-sizing: border-box;
 }
 
-html, body { 
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
     margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font: 400 1rem/1.5 var(--font-text);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 
-li{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+app-root {
+    display: block;
 }
 
-.mdc-card__media{
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+h1, h2, h3, h4 {
+    margin: 0;
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+}
+
+p {
+    margin: 0;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+a {
+    color: var(--accent-text);
+}
+
+:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+.container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+}
+
+.material-symbols-rounded {
+    font-size: 1.25em;
+    line-height: 1;
+    user-select: none;
+}
+
+.skeleton {
+    display: block;
+    border-radius: var(--radius-xs);
+    background: linear-gradient(90deg, var(--fill) 0%, var(--fill-strong) 50%, var(--fill) 100%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+    from { background-position: 100% 0; }
+    to { background-position: -100% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }

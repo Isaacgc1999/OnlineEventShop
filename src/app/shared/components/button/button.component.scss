@@ -1,18 +1,87 @@
-@use "../../../../colors.scss" as *;
+// The wrapper adds no box, so the inner <button> lays out as if it were used directly.
+:host {
+    display: contents;
+}
 
-.custom-button{
-    background-color: $dark;
-    color: $light;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: var(--radius-pill);
+    font: 600 0.9375rem/1 var(--font-text);
+    white-space: nowrap;
     cursor: pointer;
-    font-size: 16px;
-    width: 100%;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+        transform var(--duration-fast) var(--ease-out),
+        background-color var(--duration-base) var(--ease-out),
+        opacity var(--duration-base) var(--ease-out);
 
-    animation: color 0.5s ease-in-out forwards;
-
-    &:hover{
-        background-color: $gray-600;
+    &:active:not(:disabled) {
+        transform: scale(0.97);
     }
+
+    &:disabled {
+        opacity: 0.38;
+        cursor: not-allowed;
+    }
+
+    &--primary {
+        background: var(--accent);
+        color: var(--on-accent);
+    }
+
+    &--tinted {
+        background: var(--tint);
+        color: var(--accent-text);
+    }
+
+    &--plain {
+        background: transparent;
+        color: var(--accent-text);
+        padding-inline: 12px;
+    }
+
+    &--danger {
+        color: var(--danger);
+    }
+
+    &--sm {
+        height: 32px;
+        padding-inline: 14px;
+        font-size: 0.8125rem;
+    }
+
+    &--lg {
+        height: 52px;
+        padding-inline: 28px;
+        font-size: 1.0625rem;
+    }
+
+    &--block {
+        width: 100%;
+    }
+
+    @media (hover: hover) {
+        &--primary:hover:not(:disabled) { background: var(--accent-hover); }
+        &--tinted:hover:not(:disabled) { background: var(--tint-strong); }
+        &--plain:hover:not(:disabled) { background: var(--fill); }
+    }
+}
+
+.spinner {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }

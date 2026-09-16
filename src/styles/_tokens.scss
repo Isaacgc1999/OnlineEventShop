@@ -1,0 +1,126 @@
+// Encore design tokens. Components read these custom properties only,
+// so dark mode is a second set of values for the same names.
+
+:root {
+  color-scheme: light dark;
+
+  // Sky scale (brand ramp). Sky 200 evolves the original #bfd3e8.
+  --sky-50: #F2F8FD;
+  --sky-100: #E3F0FB;
+  --sky-200: #C4DEF4;
+  --sky-300: #93C4EC;
+  --sky-400: #5AA8E6;
+  --sky-500: #2A8BDB;
+  --sky-600: #1874C4;
+  --sky-700: #125DA0;
+  --sky-900: #0B2A4A;
+
+  // Surfaces
+  --bg: #F4F7FA;
+  --surface: #FFFFFF;
+  --tint: var(--sky-100);
+  --tint-strong: var(--sky-200);
+  --separator: #E1E8F0;
+  --hairline: rgba(14, 27, 43, 0.08);
+  --fill: rgba(14, 27, 43, 0.06);
+  --fill-strong: rgba(14, 27, 43, 0.11);
+  --material: rgba(255, 255, 255, 0.74);
+
+  // Text
+  --text: #0E1B2B;
+  --text-2: #536377;
+  --text-3: #8A98A9;
+
+  // Accent: the only colour for things you can press
+  --accent: var(--sky-600);
+  --accent-hover: var(--sky-700);
+  --on-accent: #FFFFFF;
+  --accent-text: #1569B3;
+  --focus-ring: var(--sky-400);
+
+  // Semantic
+  --success: #0E7A4F;
+  --success-bg: #DDF5EA;
+  --warning: #9A5B00;
+  --warning-bg: #FFF1D6;
+  --danger: #C8323A;
+  --danger-bg: #FDE7E8;
+
+  --toast-bg: #0E1B2B;
+  --toast-text: #EAF2FA;
+  --toast-action: var(--sky-300);
+
+  // Elevation: flat by default, lift on hover, float for bars and toasts
+  --shadow-lift: 0 1px 2px rgba(14, 27, 43, 0.05), 0 14px 30px -14px rgba(21, 105, 179, 0.3);
+  --shadow-float: 0 -10px 40px -16px rgba(14, 27, 43, 0.28);
+
+  // Type
+  --font-display: "Manrope", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+
+  // Radius: rounder as objects get larger
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;
+
+  // Layout
+  --container-max: 1120px;
+  --gutter: 16px;
+  --header-height: 60px;
+
+  // Motion
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 420ms;
+}
+
+@media (min-width: 600px) {
+  :root { --gutter: 24px; }
+}
+
+@media (min-width: 900px) {
+  :root { --gutter: 40px; }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0A1119;
+    --surface: #121C27;
+    --tint: #16314D;
+    --tint-strong: #1D4470;
+    --separator: #223142;
+    --hairline: rgba(234, 242, 250, 0.08);
+    --fill: rgba(234, 242, 250, 0.07);
+    --fill-strong: rgba(234, 242, 250, 0.12);
+    --material: rgba(18, 28, 39, 0.74);
+
+    --text: #EAF2FA;
+    --text-2: #9AABBD;
+    --text-3: #66788C;
+
+    // Light-blue pill with dark text, as Revolut does in dark mode
+    --accent: #7CC0F2;
+    --accent-hover: var(--sky-400);
+    --on-accent: #06121F;
+    --accent-text: #8CCBF6;
+
+    --success: #3DD68C;
+    --success-bg: #0F3325;
+    --warning: #F0B24A;
+    --warning-bg: #3A2A0F;
+    --danger: #FF6B70;
+    --danger-bg: #3D1618;
+
+    --toast-bg: #EAF2FA;
+    --toast-text: #0E1B2B;
+    --toast-action: #1569B3;
+
+    --shadow-lift: 0 1px 2px rgba(0, 0, 0, 0.4), 0 14px 30px -14px rgba(0, 0, 0, 0.7);
+    --shadow-float: 0 -10px 40px -16px rgba(0, 0, 0, 0.75);
+  }
+}

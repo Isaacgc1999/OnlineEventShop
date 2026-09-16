@@ -1,23 +1,55 @@
-.number-input{
-    display: flex;
+:host {
+    display: inline-flex;
+    flex: none;
+}
+
+.stepper {
+    display: inline-flex;
     align-items: center;
-    
-    &__left{
-        padding: 5px 10px;
-        margin-right: 5px;
+    padding: 3px;
+    border-radius: var(--radius-sm);
+    background: var(--tint);
+
+    &__btn {
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 38px;
+        border: 0;
+        border-radius: 9px;
+        background: transparent;
+        color: var(--accent-text);
         cursor: pointer;
-        border-radius: 5px;
+        -webkit-tap-highlight-color: transparent;
+        transition:
+            background-color var(--duration-fast) var(--ease-out),
+            transform var(--duration-fast) var(--ease-out);
+
+        .material-symbols-rounded {
+            font-size: 20px;
+        }
+
+        @media (hover: hover) {
+            &:hover:not(:disabled) {
+                background: var(--surface);
+            }
+        }
+
+        &:active:not(:disabled) {
+            transform: scale(0.92);
+        }
+
+        &:disabled {
+            color: var(--text-3);
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
     }
 
-    &__center{
-        width: 30px;
+    &__value {
+        min-width: 28px;
         text-align: center;
-    }
-
-    &__right{
-        padding: 5px 10px;
-        margin-left: 5px;
-        cursor: pointer;
-        border-radius: 5px;
+        font: 800 1.0625rem/1 var(--font-display);
+        font-variant-numeric: tabular-nums;
     }
 }

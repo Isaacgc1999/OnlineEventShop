@@ -1,14 +1,20 @@
 <header class="app-header">
-    <div class="app-header__container">
-        <div class="app-header__container__logo">
-            <img class="app-header__container__logo__img" src="images/ticket.png" width="50" height="50" alt="Logo" />
-            <a class="app-header__container__logo__title" routerLink="/">
-                <span style="font-size: 12px;">Online Event</span>
-                <span style="font-size: 25px;">Shop</span>
-            </a>
-        </div>
-        <nav class="app-header__container__nav-links">
-            <a href="https://github.com/Isaacgc1999/OnlineEventShop" target="_blank">Contact</a>
+    <div class="container app-header__bar">
+        <a class="brand" routerLink="/" aria-label="Online Event Shop, all events">
+            <span class="brand__mark">
+                <span class="material-symbols-rounded" aria-hidden="true">confirmation_number</span>
+            </span>
+            <span class="brand__name">Online Event Shop</span>
+        </a>
+        <nav class="app-header__actions" aria-label="Main">
+            <a class="app-header__link" href="https://github.com/Isaacgc1999/OnlineEventShop" target="_blank" rel="noopener">Contact</a>
+            @if (totalTickets() > 0 && cartEventId()) {
+                <a class="cart-link" [routerLink]="['/event', cartEventId()]"
+                    [attr.aria-label]="'Cart, ' + totalTickets() + (totalTickets() === 1 ? ' ticket' : ' tickets')">
+                    <span class="material-symbols-rounded" aria-hidden="true">shopping_bag</span>
+                    <span class="cart-link__badge">{{ totalTickets() }}</span>
+                </a>
+            }
         </nav>
     </div>
 </header>

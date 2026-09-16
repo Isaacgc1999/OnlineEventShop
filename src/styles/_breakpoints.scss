@@ -1,0 +1,11 @@
+// Use in component styles with: @use 'styles/breakpoints' as bp;
+$sm: 600px;
+$md: 900px;
+
+@mixin up($breakpoint) {
+  @media (min-width: $breakpoint) { @content; }
+}
+
+@mixin down($breakpoint) {
+  @media (max-width: ($breakpoint - 0.02px)) { @content; }
+}

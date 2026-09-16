@@ -1,37 +1,31 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { CardComponent } from "../../shared/components/card/card.component";
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { catchError, map, of } from 'rxjs';
+import { CardComponent } from '../../shared/components/card/card.component';
 import { CatalogueService } from '../../core/services/catalogue/catalogue.service';
-import { Event } from '../../core/models/event.model';
-import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { CatalogueState } from '../../core/models/catalogue-state.model';
 
 @Component({
   selector: 'app-catalogue',
   standalone: true,
   imports: [CardComponent],
   templateUrl: './catalogue.component.html',
-  styleUrl: './catalogue.component.scss'
+  styleUrl: './catalogue.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CatalogueComponent  implements OnInit{
+export class CatalogueComponent {
   private catalogueService = inject(CatalogueService);
-  private router = inject(Router);
-  events: Event[] = [];
-  private readonly destroy$ = new Subject<void>();
 
-  ngOnInit(){
-    this.catalogueService.getEvents()
-    .pipe(takeUntil(this.destroy$))
-    .subscribe((events) => {
-      this.events = events.sort((a, b) => Number(a.endDate) - Number(b.endDate));
-    });
-  }
+  readonly state = toSignal(
+    this.catalogueService.getEvents().pipe(
+      map((events): CatalogueState => ({
+        status: 'ready',
+        events: [...events].sort((a, b) => Number(a.endDate) - Number(b.endDate))
+      })),
+      catchError(() => of<CatalogueState>({ status: 'error', events: [] }))
+    ),
+    { initialValue: { status: 'loading', events: [] } as CatalogueState }
+  );
 
-  onCardClick(id: string) {
-    this.router.navigate(['/event', id]);
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+  protected readonly skeletonCards = [1, 2, 3, 4];
 }
