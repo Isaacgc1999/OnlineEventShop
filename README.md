@@ -1,6 +1,6 @@
 # 🎟️ Online Event Shop
 
-A concert ticket shop built with **Angular 19**. Browse events, pick tickets for each date and manage them in an order summary that remembers your cart between visits. The UI uses its own light-blue design system, inspired by Apple (iOS and macOS), Revolut and Trade Republic, and it switches to dark mode automatically.
+A concert ticket shop built with **Angular 19**. Browse events, pick tickets for each date and manage them in an order summary that remembers your cart between visits. The UI uses its own light-blue design system and it switches to dark mode automatically.
 
 ---
 
